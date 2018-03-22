@@ -12,6 +12,7 @@ private:
 	int quickSortDivide(double* tab, int l, int r);
 	void swap_(double* tab, int i, int j);
 <<<<<<< HEAD
+<<<<<<< HEAD
 	int writeToFile(int m, int n, int c, int s);
 =======
 	int dualPivotQuickSortDivide(double* tab, int l, int r, int* lp);
@@ -19,6 +20,9 @@ private:
 	int writeToFile(int m, int n, int c, int s, char* filename);
 	int writeToFile(int m, int n, int c, int s, int time, char* filename);
 >>>>>>> 7f2a5f3... Revert "Revert "Revert "Revert "Add project files.""""
+=======
+	int writeToFile(int m, int n, int c, int s);
+>>>>>>> 6eb09e40ad9077713e2a3734078125992d27646e
 	int clearFile(int m);
 
 	int randomizedSelectDivide(double* tab, int l, int r);
@@ -33,9 +37,12 @@ public:
 	void mergeSort(double* tab, int p, int r);
 	void quickSort(double* tab, int l, int r);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 	void dualPivotQuickSort(double* tab, int l, int r);
 >>>>>>> 7f2a5f3... Revert "Revert "Revert "Revert "Add project files.""""
+=======
+>>>>>>> 6eb09e40ad9077713e2a3734078125992d27646e
 	void quickSortWithInsertionSort(double* tab, int l, int r);
 	void mergeSortWithInsertionSort(double* tab, int p, int r);
 
@@ -46,11 +53,14 @@ public:
 	void plotGnuplot(int m);
 	int testSort(int m);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 	int testSortWithoutStats(int algo, int order);
 	int testSortWithStats(char* filename, int k);
 
 >>>>>>> 7f2a5f3... Revert "Revert "Revert "Revert "Add project files.""""
+=======
+>>>>>>> 6eb09e40ad9077713e2a3734078125992d27646e
 	int testMergedSort(int m);
 
 	int testSearch(int m);

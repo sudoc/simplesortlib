@@ -1,9 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <<<<<<< HEAD
+<<<<<<< HEAD
 <Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 =======
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 >>>>>>> 7f2a5f3... Revert "Revert "Revert "Revert "Add project files.""""
+=======
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+>>>>>>> 6eb09e40ad9077713e2a3734078125992d27646e
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -27,30 +31,42 @@
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>aisd2</RootNamespace>
 <<<<<<< HEAD
+<<<<<<< HEAD
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
 =======
     <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
 >>>>>>> 7f2a5f3... Revert "Revert "Revert "Revert "Add project files.""""
+=======
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+>>>>>>> 6eb09e40ad9077713e2a3734078125992d27646e
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
 <<<<<<< HEAD
+<<<<<<< HEAD
     <PlatformToolset>v140</PlatformToolset>
 =======
     <PlatformToolset>v141</PlatformToolset>
 >>>>>>> 7f2a5f3... Revert "Revert "Revert "Revert "Add project files.""""
+=======
+    <PlatformToolset>v140</PlatformToolset>
+>>>>>>> 6eb09e40ad9077713e2a3734078125992d27646e
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
 <<<<<<< HEAD
+<<<<<<< HEAD
     <PlatformToolset>v140</PlatformToolset>
 =======
     <PlatformToolset>v141</PlatformToolset>
 >>>>>>> 7f2a5f3... Revert "Revert "Revert "Revert "Add project files.""""
+=======
+    <PlatformToolset>v140</PlatformToolset>
+>>>>>>> 6eb09e40ad9077713e2a3734078125992d27646e
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -58,20 +74,28 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
 <<<<<<< HEAD
+<<<<<<< HEAD
     <PlatformToolset>v140</PlatformToolset>
 =======
     <PlatformToolset>v141</PlatformToolset>
 >>>>>>> 7f2a5f3... Revert "Revert "Revert "Revert "Add project files.""""
+=======
+    <PlatformToolset>v140</PlatformToolset>
+>>>>>>> 6eb09e40ad9077713e2a3734078125992d27646e
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
 <<<<<<< HEAD
+<<<<<<< HEAD
     <PlatformToolset>v140</PlatformToolset>
 =======
     <PlatformToolset>v141</PlatformToolset>
 >>>>>>> 7f2a5f3... Revert "Revert "Revert "Revert "Add project files.""""
+=======
+    <PlatformToolset>v140</PlatformToolset>
+>>>>>>> 6eb09e40ad9077713e2a3734078125992d27646e
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
