@@ -5,11 +5,6 @@
 #include "sort.h"
 #include "sort_int.h"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-int main()
-{
-=======
 int main(int argc, char* argv[])
 {
 	// algorithm
@@ -73,24 +68,13 @@ int main(int argc, char* argv[])
 		sort.testSortWithStats(filename, k);
 	}
 	//free (filename);
->>>>>>> 7f2a5f3... Revert "Revert "Revert "Revert "Add project files.""""
-=======
-int main()
-{
->>>>>>> 6eb09e40ad9077713e2a3734078125992d27646e
 	//sort sort;
 	//sort_int sort_int;
 	//sort.testSort(1);
 	//sort.testMergedSort(1);
 	//sort.testSearch(1);
 	//sort_int.testSort(1);
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 	getchar();
->>>>>>> 7f2a5f3... Revert "Revert "Revert "Revert "Add project files.""""
-=======
->>>>>>> 6eb09e40ad9077713e2a3734078125992d27646e
 	return 0;
 }
 

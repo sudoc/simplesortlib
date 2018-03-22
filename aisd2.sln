@@ -1,18 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-<<<<<<< HEAD
-<<<<<<< HEAD
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
-=======
+
 # Visual Studio 15
 VisualStudioVersion = 15.0.27428.2005
->>>>>>> 7f2a5f3... Revert "Revert "Revert "Revert "Add project files.""""
-=======
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
->>>>>>> 6eb09e40ad9077713e2a3734078125992d27646e
-MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "aisd2", "aisd2\aisd2.vcxproj", "{CF254257-A839-4E0E-BDC7-D6EA17F23196}"
 EndProject
 Global
@@ -35,13 +25,7 @@ Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E2211578-58A0-42B0-A815-D082E9377DF6}
 	EndGlobalSection
->>>>>>> 7f2a5f3... Revert "Revert "Revert "Revert "Add project files.""""
-=======
->>>>>>> 6eb09e40ad9077713e2a3734078125992d27646e
 EndGlobal

@@ -1,17 +1,4 @@
 #include "sort.h"
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 6eb09e40ad9077713e2a3734078125992d27646e
-#include <stdlib.h>     /* srand, rand */
-#include <time.h>
-#include <iostream>
-
-sort::sort()
-{
-	srand(time(NULL));
-<<<<<<< HEAD
-=======
 //#include <stdlib.h>     /* srand, rand */
 #include <time.h>
 #include <iostream>
@@ -23,18 +10,12 @@ sort::sort()
 sort::sort()
 {
 	//srand(time(NULL));
->>>>>>> 7f2a5f3... Revert "Revert "Revert "Revert "Add project files.""""
-=======
->>>>>>> 6eb09e40ad9077713e2a3734078125992d27646e
 }
 
 sort::~sort()
 {
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 int getRand(const int& A, const int& B) {
 	static std::random_device randDev;
 	static std::mt19937 twister(randDev());
@@ -44,9 +25,6 @@ int getRand(const int& A, const int& B) {
 	return dist(twister);
 }
 
->>>>>>> 7f2a5f3... Revert "Revert "Revert "Revert "Add project files.""""
-=======
->>>>>>> 6eb09e40ad9077713e2a3734078125992d27646e
 void sort::insertionSort(double* tab, int l, int r)
 {
 	if (r-l <= 1)
@@ -232,9 +210,6 @@ void sort::quickSortWithInsertionSort(double* tab, int l, int r)
 	}
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 int sort::dualPivotQuickSortDivide(double* tab, int l, int r, int* lpivot)
 {
 	//jezeli pivot lewy jest wiekszy od prawego to je zamien
@@ -295,9 +270,6 @@ void sort::dualPivotQuickSort(double* tab, int l, int r)
 	}
 }
 
->>>>>>> 7f2a5f3... Revert "Revert "Revert "Revert "Add project files.""""
-=======
->>>>>>> 6eb09e40ad9077713e2a3734078125992d27646e
 int chooseRandomDividePoint(int l, int r)
 {
 	//element losowy z przedzialu
@@ -458,15 +430,7 @@ double* sort::createTab(int m, int n)
 	{
 		for (int i = 0; i < n; ++i)
 		{
-<<<<<<< HEAD
-<<<<<<< HEAD
-			tab[i] = rand();
-=======
 			tab[i] = getRand(0,10000);
->>>>>>> 7f2a5f3... Revert "Revert "Revert "Revert "Add project files.""""
-=======
-			tab[i] = rand();
->>>>>>> 6eb09e40ad9077713e2a3734078125992d27646e
 		}
 	}
 	//ciagi posortowane
@@ -474,15 +438,7 @@ double* sort::createTab(int m, int n)
 	{
 		for (int i = 0; i < n; ++i)
 		{
-<<<<<<< HEAD
-<<<<<<< HEAD
-			tab[i] = rand();
-=======
 			tab[i] = getRand(0,10000);
->>>>>>> 7f2a5f3... Revert "Revert "Revert "Revert "Add project files.""""
-=======
-			tab[i] = rand();
->>>>>>> 6eb09e40ad9077713e2a3734078125992d27646e
 		}
 		quickSort(tab, 0, n);
 	}
@@ -491,15 +447,7 @@ double* sort::createTab(int m, int n)
 	{
 		for (int i = 0; i < n; ++i)
 		{
-<<<<<<< HEAD
-<<<<<<< HEAD
-			tab[i] = rand();
-=======
 			tab[i] = getRand(0,10000);
->>>>>>> 7f2a5f3... Revert "Revert "Revert "Revert "Add project files.""""
-=======
-			tab[i] = rand();
->>>>>>> 6eb09e40ad9077713e2a3734078125992d27646e
 		}
 		quickSort(tab, 0, n);
 		int j = n;
@@ -521,17 +469,6 @@ double* sort::createTab(int m, int n)
 	return tab;
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 6eb09e40ad9077713e2a3734078125992d27646e
-int sort::writeToFile(int m, int n, int c, int s)
-{ 
-	char* out = (char*)malloc(sizeof(char*) * 10);
-	sprintf(out, "%s%02d%s", "comp", m, ".txt");
-
-<<<<<<< HEAD
-=======
 /* m - algo
  * n - ilosc elementow
  * c - comp
@@ -543,15 +480,12 @@ int sort::writeToFile(int m, int n, int c, int s, char* filename)
 	char* out = (char*)malloc(sizeof(char*) * 10);
 	
 	sprintf(out, "%s%s%02d%s", filename, "_compX", m, ".txt");
-=======
->>>>>>> 6eb09e40ad9077713e2a3734078125992d27646e
 	FILE *f1 = fopen(out, "a");
 	if (f1 == NULL)
 	{
 		printf("Error opening file!\n");
 		return 1;
 	}
-<<<<<<< HEAD
 	fprintf(f1, "%d\n", n);
 	fclose(f1);
 
@@ -601,41 +535,22 @@ int sort::writeToFile(int m, int n, int c, int s, int time, char* filename)
 	char* out = (char*)malloc(sizeof(char*) * 10);
 
 	sprintf(out, "%s%s%02d%s", filename, "_X", m, ".txt");
->>>>>>> 7f2a5f3... Revert "Revert "Revert "Revert "Add project files.""""
 	FILE *f1 = fopen(out, "a");
 	if (f1 == NULL)
 	{
 		printf("Error opening file!\n");
 		return 1;
 	}
-<<<<<<< HEAD
-=======
->>>>>>> 6eb09e40ad9077713e2a3734078125992d27646e
-	fprintf(f1, "%d %d\n", n, c);
-	fclose(f1);
-
-	sprintf(out, "%s%02d%s", "swap", m, ".txt");
-<<<<<<< HEAD
-=======
 	fprintf(f1, "%d\n", n);
 	fclose(f1);
 
 	sprintf(out, "%s%s%02d%s", filename, "_compY", m, ".txt");
->>>>>>> 7f2a5f3... Revert "Revert "Revert "Revert "Add project files.""""
-=======
->>>>>>> 6eb09e40ad9077713e2a3734078125992d27646e
 	FILE *f2 = fopen(out, "a");
 	if (f2 == NULL)
 	{
 		printf("Error opening file!\n");
 		return 1;
 	}
-<<<<<<< HEAD
-<<<<<<< HEAD
-	fprintf(f2, "%d %d\n", n, s);
-	fclose(f2);
-
-=======
 	fprintf(f2, "%d\n", c);
 	fclose(f2);
 
@@ -659,12 +574,6 @@ int sort::writeToFile(int m, int n, int c, int s, int time, char* filename)
 	fprintf(f5, "%d\n", time);
 	fclose(f5);
 
->>>>>>> 7f2a5f3... Revert "Revert "Revert "Revert "Add project files.""""
-=======
-	fprintf(f2, "%d %d\n", n, s);
-	fclose(f2);
-
->>>>>>> 6eb09e40ad9077713e2a3734078125992d27646e
 	free(out);
 	return 0;
 }
@@ -736,15 +645,7 @@ int sort::testSort(int m)
 		comp = 0; swap = 0;
 		for (int i = 1; i <= 3; ++i)
 			sort::clearFile(i);
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
 		char* empty = "";
->>>>>>> 7f2a5f3... Revert "Revert "Revert "Revert "Add project files.""""
-=======
-
->>>>>>> 6eb09e40ad9077713e2a3734078125992d27646e
 		// dla wszystkich n
 		for (int i = 100; i <= 100000; i += 100)
 		{
@@ -762,60 +663,28 @@ int sort::testSort(int m)
 				comp = 0; swap = 0;
 				insertionSort(tab1, 0, i - 1);
 				//printTab(tab2, i);
-<<<<<<< HEAD
-<<<<<<< HEAD
-				sort::writeToFile(1, i, comp, swap);
-=======
 				sort::writeToFile(1, i, comp, swap, empty);
->>>>>>> 7f2a5f3... Revert "Revert "Revert "Revert "Add project files.""""
-=======
-				sort::writeToFile(1, i, comp, swap);
->>>>>>> 6eb09e40ad9077713e2a3734078125992d27646e
 				delete[] tab1;
 
 				comp = 0; swap = 0;
 				mergeSort(tab2, 0, i-1);
 				//printTab(tab3, i);
-<<<<<<< HEAD
-<<<<<<< HEAD
-				sort::writeToFile(2, i, comp, swap);
-=======
 				sort::writeToFile(2, i, comp, swap, empty);
->>>>>>> 7f2a5f3... Revert "Revert "Revert "Revert "Add project files.""""
-=======
-				sort::writeToFile(2, i, comp, swap);
->>>>>>> 6eb09e40ad9077713e2a3734078125992d27646e
 				delete[] tab2;
 
 				comp = 0; swap = 0;
 				quickSort(tab3, 0, i-1);
 				//printTab(tab3, i);
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 6eb09e40ad9077713e2a3734078125992d27646e
-				sort::writeToFile(3, i, comp, swap);
-				delete[] tab3;
-			}
-		}
-<<<<<<< HEAD
-=======
 				sort::writeToFile(3, i, comp, swap, empty);
 				delete[] tab3;
 			}
 		}
 		//free(empty);
->>>>>>> 7f2a5f3... Revert "Revert "Revert "Revert "Add project files.""""
-=======
->>>>>>> 6eb09e40ad9077713e2a3734078125992d27646e
 	}
 	sort::plotGnuplot(1);
 	return 0;
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 int sort::testSortWithoutStats(int algo, int order)
 {
 	// get size of tab
@@ -932,9 +801,6 @@ int sort::testSortWithStats(char* filename, int k)
 	return 0;
 }
 
->>>>>>> 7f2a5f3... Revert "Revert "Revert "Revert "Add project files.""""
-=======
->>>>>>> 6eb09e40ad9077713e2a3734078125992d27646e
 int sort::testMergedSort(int m)
 {
 	if (m == 1)
@@ -942,15 +808,7 @@ int sort::testMergedSort(int m)
 		comp = 0; swap = 0;
 		for(int i=1;i<=5;++i)
 			sort::clearFile(i);
-<<<<<<< HEAD
-<<<<<<< HEAD
-		
-=======
 		char* empty = "";
->>>>>>> 7f2a5f3... Revert "Revert "Revert "Revert "Add project files.""""
-=======
-		
->>>>>>> 6eb09e40ad9077713e2a3734078125992d27646e
 		// dla wszystkich n
 		for (int i = 2; i <= 100; i += 1)
 		{
@@ -972,80 +830,35 @@ int sort::testMergedSort(int m)
 				comp = 0; swap = 0;
 				insertionSort(tab1, 0, i - 1);
 				//printTab(tab1, i);
-<<<<<<< HEAD
-<<<<<<< HEAD
-				sort::writeToFile(1, i, comp, swap);
-=======
 				sort::writeToFile(1, i, comp, swap, empty);
->>>>>>> 7f2a5f3... Revert "Revert "Revert "Revert "Add project files.""""
-=======
-				sort::writeToFile(1, i, comp, swap);
->>>>>>> 6eb09e40ad9077713e2a3734078125992d27646e
 				delete[] tab1;
 
 				comp = 0; swap = 0;
 				mergeSort(tab2, 0, i - 1);
 				//printTab(tab2, i);
-<<<<<<< HEAD
-<<<<<<< HEAD
-				sort::writeToFile(2, i, comp, swap);
-=======
 				sort::writeToFile(2, i, comp, swap, empty);
->>>>>>> 7f2a5f3... Revert "Revert "Revert "Revert "Add project files.""""
-=======
-				sort::writeToFile(2, i, comp, swap);
->>>>>>> 6eb09e40ad9077713e2a3734078125992d27646e
 				delete[] tab2;
 
 				comp = 0; swap = 0;
 				quickSort(tab3, 0, i - 1);
 				//printTab(tab3, i);
-<<<<<<< HEAD
-<<<<<<< HEAD
-				sort::writeToFile(3, i, comp, swap);
-=======
 				sort::writeToFile(3, i, comp, swap, empty);
->>>>>>> 7f2a5f3... Revert "Revert "Revert "Revert "Add project files.""""
-=======
-				sort::writeToFile(3, i, comp, swap);
->>>>>>> 6eb09e40ad9077713e2a3734078125992d27646e
 				delete[] tab3;
 
 				comp = 0; swap = 0;
 				quickSortWithInsertionSort(tab4, 0, i - 1);
 				//printTab(tab4, i);
-<<<<<<< HEAD
-<<<<<<< HEAD
-				sort::writeToFile(4, i, comp, swap);
-=======
 				sort::writeToFile(4, i, comp, swap, empty);
->>>>>>> 7f2a5f3... Revert "Revert "Revert "Revert "Add project files.""""
-=======
-				sort::writeToFile(4, i, comp, swap);
->>>>>>> 6eb09e40ad9077713e2a3734078125992d27646e
 				delete[] tab4;
 
 				comp = 0; swap = 0;
 				mergeSortWithInsertionSort(tab5, 0, i - 1);
 				//printTab(tab5, i);
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 6eb09e40ad9077713e2a3734078125992d27646e
-				sort::writeToFile(5, i, comp, swap);
-				delete[] tab5;
-			}
-		}
-<<<<<<< HEAD
-=======
 				sort::writeToFile(5, i, comp, swap, empty);
 				delete[] tab5;
 			}
 		}
 		free(empty);
->>>>>>> 7f2a5f3... Revert "Revert "Revert "Revert "Add project files.""""
-=======
->>>>>>> 6eb09e40ad9077713e2a3734078125992d27646e
 	}
 	sort::plotGnuplot(2);
 	return 0;
@@ -1058,15 +871,7 @@ int sort::testSearch(int m)
 		comp = 0; swap = 0;
 		for (int i = 8; i <= 9; ++i)
 			sort::clearFile(i);
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
 		char* empty = "";
->>>>>>> 7f2a5f3... Revert "Revert "Revert "Revert "Add project files.""""
-=======
-
->>>>>>> 6eb09e40ad9077713e2a3734078125992d27646e
 		// dla wszystkich n
 		for (int i = 5; i <= 100; i += 1)
 		{
@@ -1084,15 +889,7 @@ int sort::testSearch(int m)
 				printTab(tab2, i);
 				quickSort(tab2, 0, i - 1);
 				printTab(tab2, i);
-<<<<<<< HEAD
-<<<<<<< HEAD
-				sort::writeToFile(8, i, comp, swap);
-=======
 				sort::writeToFile(8, i, comp, swap, empty);
->>>>>>> 7f2a5f3... Revert "Revert "Revert "Revert "Add project files.""""
-=======
-				sort::writeToFile(8, i, comp, swap);
->>>>>>> 6eb09e40ad9077713e2a3734078125992d27646e
 				delete[] tab1;
 
 				comp = 0; swap = 0;
@@ -1100,15 +897,7 @@ int sort::testSearch(int m)
 				printTab(tab2, i);
 				quickSort(tab2, 0, i - 1);
 				printTab(tab2, i);
-<<<<<<< HEAD
-<<<<<<< HEAD
-				sort::writeToFile(9, i, comp, swap);
-=======
 				sort::writeToFile(9, i, comp, swap, empty);
->>>>>>> 7f2a5f3... Revert "Revert "Revert "Revert "Add project files.""""
-=======
-				sort::writeToFile(9, i, comp, swap);
->>>>>>> 6eb09e40ad9077713e2a3734078125992d27646e
 				delete[] tab2;
 			}
 		}
