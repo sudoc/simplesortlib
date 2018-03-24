@@ -9,9 +9,12 @@ private:
 	int swap;
 	
 	void merge(double* tab, int p, int q, int r);
+	void mergeReverse(double* tab, int p, int q, int r);
 	int quickSortDivide(double* tab, int l, int r);
+	int quickSortDivideReverse(double* tab, int l, int r);
 	void swap_(double* tab, int i, int j);
 	int dualPivotQuickSortDivide(double* tab, int l, int r, int* lp);
+	int checkSortingAlgorithm(double *tab, int l, int p, int order);
 
 	int writeToFile(int m, int n, int c, int s, char* filename);
 	int writeToFile(int m, int n, int c, int s, int time, char* filename);
@@ -26,8 +29,11 @@ public:
 	virtual ~sort();
 
 	void insertionSort(double* tab, int l, int r);
+	void insertionSortReverse(double* tab, int l, int r);
 	void mergeSort(double* tab, int p, int r);
+	void mergeSortReverse(double* tab, int p, int r);
 	void quickSort(double* tab, int l, int r);
+	void quickSortReverse(double* tab, int l, int r);
 	void dualPivotQuickSort(double* tab, int l, int r);
 	void quickSortWithInsertionSort(double* tab, int l, int r);
 	void mergeSortWithInsertionSort(double* tab, int p, int r);

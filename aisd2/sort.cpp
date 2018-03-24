@@ -28,7 +28,7 @@ int getRand(const int& A, const int& B) {
 void sort::insertionSort(double* tab, int l, int r)
 {
 	if (r-l <= 1)
-		return;// tab;
+		return;
 
 	double key;
 	int j;
@@ -46,8 +46,29 @@ void sort::insertionSort(double* tab, int l, int r)
 		tab[j + 1] = key;
 		++swap;
 	}
+}
 
-	//return tab;
+void sort::insertionSortReverse(double* tab, int l, int r)
+{
+	if (r - l <= 1)
+		return;
+
+	double key;
+	int j;
+
+	//sprawdzaj od 2 bo 1 jest juz posortowany
+	for (int i = l + 1; i <= r; ++i)
+	{
+		key = tab[i];
+		//porownuj klucz z reszta po kolei
+		for (j = i - 1; j >= 0 && tab[j] < key && ++comp; j--)
+		{
+			tab[j + 1] = tab[j];
+			++swap;
+		}
+		tab[j + 1] = key;
+		++swap;
+	}
 }
 
 void sort::merge(double* tab, int p, int q, int r)
@@ -61,8 +82,7 @@ void sort::merge(double* tab, int p, int q, int r)
 		tmp1[i] = tab[p + i];
 	for (j = 0; j < n2; ++j)
 		tmp2[j] = tab[q + j + 1];
-	//tmp1[n1] = 0; //NULL
-	//tmp2[n2] = 0; //NULL
+
 	i = 0;
 	j = 0;
 	k = p;
@@ -85,25 +105,10 @@ void sort::merge(double* tab, int p, int q, int r)
 	{
 		tab[k++] = tmp2[j++]; ++swap;
 	}
-	/*for (int k = p; k <= r; ++k)
-	{
-		if (tmp1[i] <= tmp2[j] && ++comp)
-		{
-			tab[k] = tmp1[i]; ++swap;
-			//if(i!=n1)
-				++i;
-		}
-		else
-		{
-			tab[k] = tmp2[j]; ++swap;
-			//if (j != n2)
-				++j;
-		}
-	}
-	*/
+
 	delete[] tmp1;
 	delete[] tmp2;
-	//return tab;
+
 }
 
 void sort::mergeSort(double* tab, int p, int r)
@@ -117,13 +122,64 @@ void sort::mergeSort(double* tab, int p, int r)
 	}
 }
 
+void sort::mergeReverse(double* tab, int p, int q, int r)
+{
+	int n1 = q - p + 1;
+	int n2 = r - q;
+	int i, j, k;
+	double* tmp1 = new double[n1 + 1];
+	double* tmp2 = new double[n2 + 1];
+	for (i = 0; i < n1; ++i)
+		tmp1[i] = tab[p + i];
+	for (j = 0; j < n2; ++j)
+		tmp2[j] = tab[q + j + 1];
+
+	i = 0;
+	j = 0;
+	k = p;
+	while (i < n1 && j < n2)
+	{
+		if (tmp2[j] > tmp1[i] && ++comp)
+		{
+			tab[k++] = tmp2[j++]; ++swap;
+		}
+		else
+		{
+			tab[k++] = tmp1[i++]; ++swap;
+		}
+	}
+	while (i < n1)
+	{
+		tab[k++] = tmp1[i++]; ++swap;
+	}
+	while (j < n2)
+	{
+		tab[k++] = tmp2[j++]; ++swap;
+	}
+
+	delete[] tmp1;
+	delete[] tmp2;
+
+}
+
+void sort::mergeSortReverse(double* tab, int p, int r)
+{
+	if (p < r)
+	{
+		int q = (p + r) >> 1;
+		mergeSortReverse(tab, p, q);
+		mergeSortReverse(tab, q + 1, r);
+		mergeReverse(tab, p, q, r);
+	}
+}
+
 void sort::mergeSortWithInsertionSort(double* tab, int p, int r)
 {
 	int j = r - p;
 
-	if (j < 0)
+	if (j <= 0)
 		return;
-	else if (j < 11 && j > 0)
+	else if (j < 11)
 	{
 		insertionSort(tab, p, r);
 	}
@@ -186,16 +242,54 @@ void sort::quickSort(double* tab, int l, int r)
 		//sortuj prawa czesc
 		quickSort(tab, i + 1, r);
 	}
-	//return tab;
+}
+
+int sort::quickSortDivideReverse(double* tab, int l, int r)
+{
+	int pivot = chooseDividePoint(l, r);
+	double pivotValue = tab[pivot];
+	//pivot na koniec
+	sort::swap_(tab, pivot, r); ++swap;
+	//zacznij od poczatku
+	int position = l;
+	//przejdz po wszystkich elementach
+	for (int i = l; i < r; i++)
+	{
+		//jezeli pivot jest mniejszy od danego elem.
+		if (tab[i] > pivotValue && ++comp)
+		{
+			//przenies elem. na lewa strone
+			sort::swap_(tab, i, position); ++swap;
+			//przesun pozycje
+			++position;
+		}
+	}
+	//przywroc pivot na swoje miejsce
+	sort::swap_(tab, position, r); ++swap;
+	return position;
+}
+
+void sort::quickSortReverse(double* tab, int l, int r)
+{
+	//jezeli jest jakis element
+	if (l < r)
+	{
+		//podziel problem na pol i zapamietaj punkt
+		int i = quickSortDivideReverse(tab, l, r);
+		//sortuj lewa czesc
+		quickSortReverse(tab, l, i - 1);
+		//sortuj prawa czesc
+		quickSortReverse(tab, i + 1, r);
+	}
 }
 
 void sort::quickSortWithInsertionSort(double* tab, int l, int r)
 {
 	int j = r - l;
 	//jezeli jest jakis element
-	if (j < 0)
+	if (j <= 0)
 		return;
-	else if (j < 12 && j > 0)
+	else if (j < 12)
 	{
 		insertionSort(tab, l, r);
 	}
@@ -685,6 +779,18 @@ int sort::testSort(int m)
 	return 0;
 }
 
+int sort::checkSortingAlgorithm(double *tab, int l, int p, int order)
+{
+	for (int i = 0; i < p - l; i++)
+	{
+		if (tab[i] > tab[i + 1] && order == 1)
+			return 1;
+		else if (tab[i] < tab[i + 1] && order == 2)
+			return 1;
+	}
+	return 0;
+}
+
 int sort::testSortWithoutStats(int algo, int order)
 {
 	// get size of tab
@@ -701,35 +807,57 @@ int sort::testSortWithoutStats(int algo, int order)
 	comp = 0; swap = 0;
 	if (algo == 1)
 	{
-		start = std::chrono::high_resolution_clock::now();
-		sort::insertionSort(tab, 0, n-1);
-		end = std::chrono::high_resolution_clock::now();
+		if (order == 1)
+		{
+			start = std::chrono::high_resolution_clock::now();
+			sort::insertionSort(tab, 0, n - 1);
+			end = std::chrono::high_resolution_clock::now();
+		}
+		else if (order == 2)
+		{
+			start = std::chrono::high_resolution_clock::now();
+			sort::insertionSortReverse(tab, 0, n - 1);
+			end = std::chrono::high_resolution_clock::now();
+		}
 	}
 	else if (algo == 2)
 	{
-		start = std::chrono::high_resolution_clock::now();
-		sort::mergeSort(tab, 0, n-1);
-		end = std::chrono::high_resolution_clock::now();
+		if (order == 1)
+		{
+			start = std::chrono::high_resolution_clock::now();
+			sort::mergeSort(tab, 0, n - 1);
+			end = std::chrono::high_resolution_clock::now();
+		}
+		else if (order == 2)
+		{
+			start = std::chrono::high_resolution_clock::now();
+			sort::mergeSortReverse(tab, 0, n - 1);
+			end = std::chrono::high_resolution_clock::now();
+		}
 	}
 	else if (algo == 3)
 	{
-		start = std::chrono::high_resolution_clock::now();
-		sort::quickSort(tab, 0, n-1);
-		end = std::chrono::high_resolution_clock::now();
-	}
-	if (order == 2)
-	{
-		int j = n-1;
-		for (int i = 0; i < n >> 1; ++i)
+		if (order == 1)
 		{
-			swap_(tab, i, j);
-			--j;
+			start = std::chrono::high_resolution_clock::now();
+			sort::quickSort(tab, 0, n - 1);
+			end = std::chrono::high_resolution_clock::now();
 		}
+		else if (order == 2)
+		{
+			start = std::chrono::high_resolution_clock::now();
+			sort::quickSortReverse(tab, 0, n - 1);
+			end = std::chrono::high_resolution_clock::now();
+		}
+	}
+	if (sort::checkSortingAlgorithm(tab, 0, n-1, order) == 1)
+	{
+		std::cerr << "Errors occured, check input and output tab" << std::endl;
 	}
 	// print algo time on stderr
 	std::cerr << "Time: ";
-	std::cerr << std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count();
-	std::cerr << "ns" << std::endl;
+	std::cerr << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+	std::cerr << "us" << std::endl;
 	// print comp and swap on stderr
 	std::cerr << "Comp: " << comp << " Swap: " \
 		<< swap << std::endl;
