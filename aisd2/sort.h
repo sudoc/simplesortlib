@@ -8,6 +8,8 @@ private:
 	int comp;
 	int swap;
 	
+	void printTab(double* tab, int n);
+
 	void merge(double* tab, int p, int q, int r);
 	void mergeReverse(double* tab, int p, int q, int r);
 	int quickSortDivide(double* tab, int l, int r);
@@ -39,7 +41,7 @@ public:
 	void mergeSortWithInsertionSort(double* tab, int p, int r);
 
 	double randomizedSelect(double* tab, int l, int r, int k);
-	double select(double* tab, int l, int r, int k);
+	int select(double* tab, int l, int r, int k);
 
 	double* createTab(int m, int n);
 	void plotGnuplot(int m);

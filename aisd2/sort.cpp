@@ -6,6 +6,8 @@
 #include <iomanip>
 #include <stdio.h>
 #include <chrono>
+#include <fstream>
+#include <iterator>
 
 sort::sort()
 {
@@ -37,13 +39,22 @@ void sort::insertionSort(double* tab, int l, int r)
 	for (int i = l+1; i <= r; ++i)
 	{
 		key = tab[i];
+#ifdef DEBUG
+		std::cerr << "Set key = tab[" << i << "]" << std::endl;
+#endif
 		//porownuj klucz z reszta po kolei
 		for (j = i - 1; j >= 0 && tab[j] > key && ++comp; j--)
 		{
 			tab[j + 1] = tab[j];
+#ifdef DEBUG
+			std::cerr << "Set tab[" << j + 1 << "] = tab[" << j << "]" << std::endl;
+#endif
 			++swap;
 		}
 		tab[j + 1] = key;
+#ifdef DEBUG
+		std::cerr << "Set tab[" << j+1 << "] = key = "<< key << std::endl;
+#endif
 		++swap;
 	}
 }
@@ -60,13 +71,22 @@ void sort::insertionSortReverse(double* tab, int l, int r)
 	for (int i = l + 1; i <= r; ++i)
 	{
 		key = tab[i];
+#ifdef DEBUG
+		std::cerr << "Set key = tab[" << i << "]" << std::endl;
+#endif
 		//porownuj klucz z reszta po kolei
 		for (j = i - 1; j >= 0 && tab[j] < key && ++comp; j--)
 		{
 			tab[j + 1] = tab[j];
+#ifdef DEBUG
+			std::cerr << "Set tab[" << j + 1 << "] = tab[" << j << "]" << std::endl;
+#endif
 			++swap;
 		}
 		tab[j + 1] = key;
+#ifdef DEBUG
+		std::cerr << "Set tab[" << j + 1 << "] = key = " << key << std::endl;
+#endif
 		++swap;
 	}
 }
@@ -90,19 +110,31 @@ void sort::merge(double* tab, int p, int q, int r)
 	{
 		if (tmp2[j] < tmp1[i] && ++comp) 
 		{
+#ifdef DEBUG
+			std::cerr << "Set tab[" << k << "] = " << tmp2[j] << std::endl;
+#endif
 			tab[k++] = tmp2[j++]; ++swap;
 		}
 		else 
 		{
+#ifdef DEBUG
+			std::cerr << "Set tab[" << k << "] = " << tmp1[i] << std::endl;
+#endif
 			tab[k++] = tmp1[i++]; ++swap;
 		}
 	}
 	while (i < n1) 
 	{
+#ifdef DEBUG
+		std::cerr << "Set tab[" << k << "] = " << tmp1[i] << std::endl;
+#endif
 		tab[k++] = tmp1[i++]; ++swap;
 	}
 	while (j < n2) 
 	{
+#ifdef DEBUG
+		std::cerr << "Set tab[" << k << "] = " << tmp2[j] << std::endl;
+#endif
 		tab[k++] = tmp2[j++]; ++swap;
 	}
 
@@ -116,8 +148,20 @@ void sort::mergeSort(double* tab, int p, int r)
 	if (p < r)
 	{
 		int q = (p + r) >> 1;
+#ifdef DEBUG
+		std::cerr << "Divide tab[" << p << ":" << r << "] to tab[" << p << \
+			":" << q << "]" << std::endl;
+#endif
 		mergeSort(tab, p, q);
+#ifdef DEBUG
+		std::cerr << "Divide tab[" << p << ":" << r << "] to tab[" << q + 1 \
+			<< ":" << r << "]" << std::endl;
+#endif
 		mergeSort(tab, q + 1, r);
+#ifdef DEBUG
+		std::cerr << "Merge tab[" << p << ":" << q << "] and tab[" << q + 1 \
+			<< ":" << r << "] to tab[" << p << ":" << r << "]" << std::endl;
+#endif
 		merge(tab, p, q, r);
 	}
 }
@@ -141,19 +185,31 @@ void sort::mergeReverse(double* tab, int p, int q, int r)
 	{
 		if (tmp2[j] > tmp1[i] && ++comp)
 		{
+#ifdef DEBUG
+			std::cerr << "Set tab[" << k << "] = " << tmp2[j] << std::endl;
+#endif
 			tab[k++] = tmp2[j++]; ++swap;
 		}
 		else
 		{
+#ifdef DEBUG
+			std::cerr << "Set tab[" << k << "] = " << tmp1[i] << std::endl;
+#endif
 			tab[k++] = tmp1[i++]; ++swap;
 		}
 	}
 	while (i < n1)
 	{
+#ifdef DEBUG
+		std::cerr << "Set tab[" << k << "] = " << tmp1[i] << std::endl;
+#endif
 		tab[k++] = tmp1[i++]; ++swap;
 	}
 	while (j < n2)
 	{
+#ifdef DEBUG
+		std::cerr << "Set tab[" << k << "] = " << tmp2[j] << std::endl;
+#endif
 		tab[k++] = tmp2[j++]; ++swap;
 	}
 
@@ -167,8 +223,20 @@ void sort::mergeSortReverse(double* tab, int p, int r)
 	if (p < r)
 	{
 		int q = (p + r) >> 1;
+#ifdef DEBUG
+		std::cerr << "Divide tab[" << p << ":" << r << "] to tab[" << p << \
+			":" << q << "]" << std::endl;
+#endif
 		mergeSortReverse(tab, p, q);
+#ifdef DEBUG
+		std::cerr << "Divide tab[" << p << ":" << r << "] to tab[" << q + 1 \
+			<< ":" << r << "]" << std::endl;
+#endif
 		mergeSortReverse(tab, q + 1, r);
+#ifdef DEBUG
+		std::cerr << "Merge tab[" << p << ":" << q << "] and tab[" << q + 1 \
+			<< ":" << r << "] to tab[" << p << ":" << r << "]" << std::endl;
+#endif
 		mergeReverse(tab, p, q, r);
 	}
 }
@@ -181,13 +249,29 @@ void sort::mergeSortWithInsertionSort(double* tab, int p, int r)
 		return;
 	else if (j < 11)
 	{
+#ifdef DEBUG
+		std::cerr << "tab really small run insertion sort on tab[" << p << \
+			":" << r << "]"<< std::endl;
+#endif
 		insertionSort(tab, p, r);
 	}
 	else
 	{
 		int q = (p + r) >> 1;
+#ifdef DEBUG
+		std::cerr << "Divide tab[" << p << ":" << r << "] to tab[" << p << \
+			":" << q << "]" << std::endl;
+#endif
 		mergeSort(tab, p, q);
+#ifdef DEBUG
+		std::cerr << "Divide tab[" << p << ":" << r << "] to tab[" << q + 1 \
+			<< ":" << r << "]" << std::endl;
+#endif
 		mergeSort(tab, q + 1, r);
+#ifdef DEBUG
+		std::cerr << "Merge tab[" << p << ":" << q << "] and tab[" << q + 1 \
+			<< ":" << r << "] to tab[" << p << ":" << r << "]" << std::endl;
+#endif
 		merge(tab, p, q, r);
 	}
 }
@@ -209,6 +293,10 @@ int sort::quickSortDivide(double* tab, int l, int r)
 {
 	int pivot = chooseDividePoint(l, r);
 	double pivotValue = tab[pivot];
+#ifdef DEBUG
+	std::cerr << "Swap pivot tab[" << pivot << "] with tab[" \
+		<< r << "]" << std::endl;
+#endif
 	//pivot na koniec
 	sort::swap_(tab, pivot, r); ++swap;
 	//zacznij od poczatku
@@ -219,12 +307,20 @@ int sort::quickSortDivide(double* tab, int l, int r)
 		//jezeli pivot jest wiekszy od danego elem.
 		if (tab[i] < pivotValue && ++comp)
 		{
+#ifdef DEBUG
+			std::cerr << "Swap tab[" << i << "] with tab[" \
+				<< position << "]" << std::endl;
+#endif
 			//przenies elem. na lewa strone
 			sort::swap_(tab, i, position); ++swap;
 			//przesun pozycje
 			++position;
 		}
 	}
+#ifdef DEBUG
+	std::cerr << "Swap pivot tab[" << position << "] with tab[" \
+		<< r << "]" << std::endl;
+#endif
 	//przywroc pivot na swoje miejsce
 	sort::swap_(tab, position, r); ++swap;
 	return position;
@@ -237,8 +333,16 @@ void sort::quickSort(double* tab, int l, int r)
 	{
 		//podziel problem na pol i zapamietaj punkt
 		int i = quickSortDivide(tab, l, r);
+#ifdef DEBUG
+		std::cerr << "Divide tab[" << l << ":" << r << "] to tab[" << l << \
+			":" << i - 1 << "]" << std::endl;
+#endif
 		//sortuj lewa czesc
 		quickSort(tab, l, i - 1);
+#ifdef DEBUG
+		std::cerr << "Divide tab[" << l << ":" << r << "] to tab[" \
+			<< i + 1 << ":" << r << "]" << std::endl;
+#endif
 		//sortuj prawa czesc
 		quickSort(tab, i + 1, r);
 	}
@@ -248,6 +352,10 @@ int sort::quickSortDivideReverse(double* tab, int l, int r)
 {
 	int pivot = chooseDividePoint(l, r);
 	double pivotValue = tab[pivot];
+#ifdef DEBUG
+	std::cerr << "Swap pivot tab[" << pivot << "] with tab[" \
+		<< r << "]" << std::endl;
+#endif
 	//pivot na koniec
 	sort::swap_(tab, pivot, r); ++swap;
 	//zacznij od poczatku
@@ -258,12 +366,20 @@ int sort::quickSortDivideReverse(double* tab, int l, int r)
 		//jezeli pivot jest mniejszy od danego elem.
 		if (tab[i] > pivotValue && ++comp)
 		{
+#ifdef DEBUG
+			std::cerr << "Swap tab[" << i << "] with tab[" \
+				<< position << "]" << std::endl;
+#endif
 			//przenies elem. na lewa strone
 			sort::swap_(tab, i, position); ++swap;
 			//przesun pozycje
 			++position;
 		}
 	}
+#ifdef DEBUG
+	std::cerr << "Swap pivot tab[" << position << "] with tab[" \
+		<< r << "]" << std::endl;
+#endif
 	//przywroc pivot na swoje miejsce
 	sort::swap_(tab, position, r); ++swap;
 	return position;
@@ -276,8 +392,16 @@ void sort::quickSortReverse(double* tab, int l, int r)
 	{
 		//podziel problem na pol i zapamietaj punkt
 		int i = quickSortDivideReverse(tab, l, r);
+#ifdef DEBUG
+		std::cerr << "Divide tab[" << l << ":" << r << "] to tab[" << l << \
+			":" << i - 1 << "]" << std::endl;
+#endif
 		//sortuj lewa czesc
 		quickSortReverse(tab, l, i - 1);
+#ifdef DEBUG
+		std::cerr << "Divide tab[" << l << ":" << r << "] to tab[" \
+			<< i + 1 << ":" << r << "]" << std::endl;
+#endif
 		//sortuj prawa czesc
 		quickSortReverse(tab, i + 1, r);
 	}
@@ -291,14 +415,26 @@ void sort::quickSortWithInsertionSort(double* tab, int l, int r)
 		return;
 	else if (j < 12)
 	{
+#ifdef DEBUG
+		std::cerr << "tab really small run insertion sort on tab[" << l << \
+			":" << r << "]" << std::endl;
+#endif
 		insertionSort(tab, l, r);
 	}
 	else
 	{
 		//podziel problem na pol i zapamietaj punkt
 		int i = quickSortDivide(tab, l, r);
+#ifdef DEBUG
+		std::cerr << "Divide tab[" << l << ":" << r << "] to tab[" << l << \
+			":" << i - 1 << "]" << std::endl;
+#endif
 		//sortuj lewa czesc
 		quickSortWithInsertionSort(tab, l, i - 1);
+#ifdef DEBUG
+		std::cerr << "Divide tab[" << l << ":" << r << "] to tab[" \
+			<< i + 1 << ":" << r << "]" << std::endl;
+#endif
 		//sortuj prawa czesc
 		quickSortWithInsertionSort(tab, i + 1, r);
 	}
@@ -309,18 +445,26 @@ int sort::dualPivotQuickSortDivide(double* tab, int l, int r, int* lpivot)
 	//jezeli pivot lewy jest wiekszy od prawego to je zamien
 	if (tab[l] > tab[r] && ++comp)
 	{
+#ifdef DEBUG
+		std::cerr << "Swap pivots tab[" << l << "] with tab[" \
+			<< r << "]" << std::endl;
+#endif
 		sort::swap_(tab, l, r); ++swap;
 	}
 	int j = l + 1; //od drugiego poniewaz pierwszy jest lpivot
 	int g = r - 1; //bez ostatniego poniewaz ostatni to rpivot
 	int k = l + 1; //podobnie
-	int lpivotValue = tab[l];
-	int rpivotValue = tab[r];
+	double lpivotValue = tab[l];
+	double rpivotValue = tab[r];
 	while (k <= g) 
 	{
 		//jezeli el jest mniejszy od lewego pivota
 		if (tab[k] < lpivotValue && ++comp) 
 		{
+#ifdef DEBUG
+			std::cerr << "Swap tab[" << k << "] with tab[" \
+				<< j << "]" << std::endl;
+#endif
 			//to zamien i przesun wskaznik w prawo 
 			sort::swap_(tab, k, j); ++swap;
 			j++;
@@ -330,10 +474,18 @@ int sort::dualPivotQuickSortDivide(double* tab, int l, int r, int* lpivot)
 		{
 			while (tab[g] > rpivotValue && k < g && ++comp)
 				g--;
+#ifdef DEBUG
+			std::cerr << "Swap pivot tab[" << k << "] with tab[" \
+				<< g << "]" << std::endl;
+#endif
 			sort::swap_(tab, k, g); ++swap;
 			g--;
 			if (tab[k] < lpivotValue && ++comp) 
 			{
+#ifdef DEBUG
+				std::cerr << "Swap pivot tab[" << k << "] with tab[" \
+					<< j << "]" << std::endl;
+#endif
 				sort::swap_(tab, k, j); ++swap;
 				j++;
 			}
@@ -342,7 +494,12 @@ int sort::dualPivotQuickSortDivide(double* tab, int l, int r, int* lpivot)
 	}
 	j--;
 	g++;
-
+#ifdef DEBUG
+	std::cerr << "Swap lpivot tab[" << l << "] with tab[" \
+		<< j << "]" << std::endl;
+	std::cerr << "Swap rpivot tab[" << r << "] with tab[" \
+		<< g << "]" << std::endl;
+#endif
 	//ustaw pivoty na swoje miesjca
 	sort::swap_(tab, l, j); ++swap;
 	sort::swap_(tab, r, g); ++swap;
@@ -358,8 +515,20 @@ void sort::dualPivotQuickSort(double* tab, int l, int r)
 	{
 		int lpivot, rpivot;
 		rpivot = dualPivotQuickSortDivide(tab, l, r, &lpivot);
+#ifdef DEBUG
+		std::cerr << "Divide tab[" << l << ":" << r << "] to tab[" \
+			<< l << ":" << lpivot - 1 << "]" << std::endl;
+#endif
 		dualPivotQuickSort(tab, l, lpivot - 1);
+#ifdef DEBUG
+		std::cerr << "Divide tab[" << l << ":" << r << "] to tab[" \
+			<< lpivot + 1 << ":" << rpivot - 1 << "]" << std::endl;
+#endif
 		dualPivotQuickSort(tab, lpivot + 1, rpivot - 1);
+#ifdef DEBUG
+		std::cerr << "Divide tab[" << l << ":" << r << "] to tab[" \
+			<< rpivot + 1 << ":" << r << "]" << std::endl;
+#endif
 		dualPivotQuickSort(tab, rpivot + 1, r);
 	}
 }
@@ -367,7 +536,7 @@ void sort::dualPivotQuickSort(double* tab, int l, int r)
 int chooseRandomDividePoint(int l, int r)
 {
 	//element losowy z przedzialu
-	return floor(rand() % (r - l + 1)) + l;
+	return (int)floor(rand() % (r - l + 1)) + l;
 }
 
 int sort::randomizedSelectDivide(double* tab, int l, int r)
@@ -419,6 +588,7 @@ double sort::randomizedSelect(double* tab, int l, int r, int k)
 		else //jezeli w prawej
 			return randomizedSelect(tab, mid + 1, r, k - i);
 	}
+	return NULL;
 }
 
 int sort::medianOfFive(double* tab, int l, int r)
@@ -450,10 +620,10 @@ int sort::chooseMedianDividePoint(double* tab, int l, int r)
 		//policz mediane podgrupy
 		int median5 = medianOfFive(tab, i, last);
 		//przenies ja na poczatek przedzialu
-		swap_(tab, median5, l + floor((i - l) / 5)); ++swap;
+		swap_(tab, median5, l + (int)floor((i - l) / 5)); ++swap;
 	}
 	//policz mediane wszystkich median z podgrup 
-	return select(tab, l, l + ceil((r - l) / 5) - 1, l + (r - l) / 10);
+	return select(tab, l, l + (int)ceil((r - l) / 5) - 1, l + (r - l) / 10);
 }
 
 int sort::selectDivide(double* tab, int l, int r, int pivot)
@@ -481,7 +651,7 @@ int sort::selectDivide(double* tab, int l, int r, int pivot)
 	return position;
 }
 
-double sort::select(double* tab, int l, int r, int k)
+int sort::select(double* tab, int l, int r, int k)
 {
 	if (l == r)
 		return l;
@@ -573,45 +743,23 @@ int sort::writeToFile(int m, int n, int c, int s, char* filename)
 { 
 	char* out = (char*)malloc(sizeof(char*) * 10);
 	
-	sprintf(out, "%s%s%02d%s", filename, "_compX", m, ".txt");
-	FILE *f1 = fopen(out, "a");
-	if (f1 == NULL)
-	{
-		printf("Error opening file!\n");
-		return 1;
-	}
-	fprintf(f1, "%d\n", n);
-	fclose(f1);
+	sprintf_s(out, 10 * sizeof(out), "%s%s%02d%s", filename, "_X", m, ".txt");
+	std::ofstream f1;
+	f1.open(out, std::ios_base::app);
+	f1 << n << std::endl;
+	f1.close();
 
-	sprintf(out, "%s%s%02d%s", filename, "_compY", m, ".txt");
-	FILE *f2 = fopen(out, "a");
-	if (f2 == NULL)
-	{
-		printf("Error opening file!\n");
-		return 1;
-	}
-	fprintf(f2, "%d\n", c);
-	fclose(f2);
+	sprintf_s(out, 10 * sizeof(out), "%s%s%02d%s", filename, "_compY", m, ".txt");
+	std::ofstream f2;
+	f2.open(out, std::ios_base::app);
+	f2 << c << std::endl;
+	f2.close();
 
-	sprintf(out, "%s%s%02d%s", filename, "_swapX", m, ".txt");
-	FILE *f3 = fopen(out, "a");
-	if (f3 == NULL)
-	{
-		printf("Error opening file!\n");
-		return 1;
-	}
-	fprintf(f3, "%d\n", n);
-	fclose(f3);
-
-	sprintf(out, "%s%s%02d%s", filename, "_swapY", m, ".txt");
-	FILE *f4 = fopen(out, "a");
-	if (f4 == NULL)
-	{
-		printf("Error opening file!\n");
-		return 1;
-	}
-	fprintf(f4, "%d\n", s);
-	fclose(f4);
+	sprintf_s(out, 10 * sizeof(out), "%s%s%02d%s", filename, "_swapY", m, ".txt");
+	std::ofstream f3;
+	f3.open(out, std::ios_base::app);
+	f3 << s << std::endl;
+	f3.close();
 
 	free(out);
 	return 0;
@@ -628,45 +776,29 @@ int sort::writeToFile(int m, int n, int c, int s, int time, char* filename)
 {
 	char* out = (char*)malloc(sizeof(char*) * 10);
 
-	sprintf(out, "%s%s%02d%s", filename, "_X", m, ".txt");
-	FILE *f1 = fopen(out, "a");
-	if (f1 == NULL)
-	{
-		printf("Error opening file!\n");
-		return 1;
-	}
-	fprintf(f1, "%d\n", n);
-	fclose(f1);
+	sprintf_s(out, 10 * sizeof(out), "%s%s%02d%s", filename, "_X", m, ".txt");
+	std::ofstream f4;
+	f4.open(out, std::ios_base::app);
+	f4 << n << std::endl;
+	f4.close();
 
-	sprintf(out, "%s%s%02d%s", filename, "_compY", m, ".txt");
-	FILE *f2 = fopen(out, "a");
-	if (f2 == NULL)
-	{
-		printf("Error opening file!\n");
-		return 1;
-	}
-	fprintf(f2, "%d\n", c);
-	fclose(f2);
+	sprintf_s(out, 10 * sizeof(out), "%s%s%02d%s", filename, "_compY", m, ".txt");
+	std::ofstream f5;
+	f5.open(out, std::ios_base::app);
+	f5 << c << std::endl;
+	f5.close();
 
-	sprintf(out, "%s%s%02d%s", filename, "_swapY", m, ".txt");
-	FILE *f4 = fopen(out, "a");
-	if (f4 == NULL)
-	{
-		printf("Error opening file!\n");
-		return 1;
-	}
-	fprintf(f4, "%d\n", s);
-	fclose(f4);
+	sprintf_s(out, 10 * sizeof(out), "%s%s%02d%s", filename, "_swapY", m, ".txt");
+	std::ofstream f6;
+	f6.open(out, std::ios_base::app);
+	f6 << s << std::endl;
+	f6.close();
 
-	sprintf(out, "%s%s%02d%s", filename, "_timeY", m, ".txt");
-	FILE *f5 = fopen(out, "a");
-	if (f5 == NULL)
-	{
-		printf("Error opening file!\n");
-		return 1;
-	}
-	fprintf(f5, "%d\n", time);
-	fclose(f5);
+	sprintf_s(out, 10 * sizeof(out), "%s%s%02d%s", filename, "_timeY", m, ".txt");
+	std::ofstream f7;
+	f7.open(out, std::ios_base::app);
+	f7 << time << std::endl;
+	f7.close();
 
 	free(out);
 	return 0;
@@ -675,26 +807,18 @@ int sort::writeToFile(int m, int n, int c, int s, int time, char* filename)
 int sort::clearFile(int m)
 {
 	char* out = (char*)malloc(sizeof(char*) * 10);
-	sprintf(out, "%s%02d%s", "comp", m, ".txt");
+	
+	sprintf_s(out, 10 * sizeof(out), "%s%02d%s", "comp", m, ".txt");
+	std::ofstream f8;
+	f8.open(out);
+	f8 << "" << std::endl;
+	f8.close();
 
-	FILE *f1 = fopen(out, "w");
-	if (f1 == NULL)
-	{
-		printf("Error opening file!\n");
-		return 1;
-	}
-	fprintf(f1, "");
-	fclose(f1);
-
-	sprintf(out, "%s%02d%s", "swap", m, ".txt");
-	FILE *f2 = fopen(out, "w");
-	if (f2 == NULL)
-	{
-		printf("Error opening file!\n");
-		return 1;
-	}
-	fprintf(f2, "");
-	fclose(f2);
+	sprintf_s(out, 10 * sizeof(out), "%s%02d%s", "swap", m, ".txt");
+	std::ofstream f9;
+	f9.open(out);
+	f9 << "" << std::endl;
+	f9.close();
 
 	free(out);
 	return 0;
@@ -724,7 +848,7 @@ void sort::plotGnuplot(int m)
 	}
 }
 
-void printTab(double* tab, int n)
+void sort::printTab(double* tab, int n)
 {
 	for (int i = 0; i < n; ++i)
 	{
@@ -750,9 +874,11 @@ int sort::testSort(int m)
 				double* tab1 = createTab(1, i);
 				//printTab(tab1, i);
 				double* tab2 = new double[i];
-				std::copy(tab1, tab1 + i, tab2);
+				//std::copy(tab1, tab1 + i, tab2);
+				memcpy(tab2, tab1, i * sizeof(double));
 				double* tab3 = new double[i];
-				std::copy(tab1, tab1 + i, tab3);
+				//std::copy(tab1, tab1 + i, tab3);
+				memcpy(tab3, tab1, i * sizeof(double));
 
 				comp = 0; swap = 0;
 				insertionSort(tab1, 0, i - 1);
@@ -855,6 +981,9 @@ int sort::testSortWithoutStats(int algo, int order)
 		std::cerr << "Errors occured, check input and output tab" << std::endl;
 	}
 	// print algo time on stderr
+#ifdef DEBUG
+	std::cerr << "DEBUG FLAG ENABLED TIME ONLY IN APROXIMATION" << std::endl;
+#endif
 	std::cerr << "Time: ";
 	std::cerr << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
 	std::cerr << "us" << std::endl;
@@ -887,18 +1016,21 @@ int sort::testSortWithStats(char* filename, int k)
 			double* tab1 = createTab(1, i);
 			//printTab(tab1, i);
 			double* tab2 = new double[i];
-			std::copy(tab1, tab1 + i, tab2);
+			//std::copy(tab1, tab1 + i, tab2);
+			memcpy(tab2, tab1, i * sizeof(double));
 			double* tab3 = new double[i];
-			std::copy(tab1, tab1 + i, tab3);
+			//std::copy(tab1, tab1 + i, tab3);
+			memcpy(tab3, tab1, i * sizeof(double));
 			double* tab4 = new double[i];
-			std::copy(tab1, tab1 + i, tab4);
+			//std::copy(tab1, tab1 + i, tab4);
+			memcpy(tab4, tab1, i * sizeof(double));
 
 			comp = 0; swap = 0;
 			auto start = std::chrono::high_resolution_clock::now();
 			insertionSort(tab1, 0, i - 1);
 			auto end = std::chrono::high_resolution_clock::now();
 			//printTab(tab1, i);
-			sort::writeToFile(1, i, comp, swap, std::chrono::duration_cast<std::chrono::microseconds>(end - start).count(), filename);
+			sort::writeToFile(1, i, comp, swap, (int)std::chrono::duration_cast<std::chrono::microseconds>(end - start).count(), filename);
 			delete[] tab1;
 
 			comp = 0; swap = 0;
@@ -906,7 +1038,7 @@ int sort::testSortWithStats(char* filename, int k)
 			mergeSort(tab2, 0, i - 1);
 			end = std::chrono::high_resolution_clock::now();
 			//printTab(tab2, i);
-			sort::writeToFile(2, i, comp, swap, std::chrono::duration_cast<std::chrono::microseconds>(end - start).count(), filename);
+			sort::writeToFile(2, i, comp, swap, (int)std::chrono::duration_cast<std::chrono::microseconds>(end - start).count(), filename);
 			delete[] tab2;
 
 			comp = 0; swap = 0;
@@ -914,7 +1046,7 @@ int sort::testSortWithStats(char* filename, int k)
 			quickSort(tab3, 0, i - 1);
 			end = std::chrono::high_resolution_clock::now();
 			//printTab(tab3, i);
-			sort::writeToFile(3, i, comp, swap, std::chrono::duration_cast<std::chrono::microseconds>(end - start).count(), filename);
+			sort::writeToFile(3, i, comp, swap, (int)std::chrono::duration_cast<std::chrono::microseconds>(end - start).count(), filename);
 			delete[] tab3;
 
 			comp = 0; swap = 0;
@@ -922,7 +1054,7 @@ int sort::testSortWithStats(char* filename, int k)
 			dualPivotQuickSort(tab4, 0, i - 1);
 			end = std::chrono::high_resolution_clock::now();
 			//printTab(tab4, i);
-			sort::writeToFile(4, i, comp, swap, std::chrono::duration_cast<std::chrono::microseconds>(end - start).count(), filename);
+			sort::writeToFile(4, i, comp, swap, (int)std::chrono::duration_cast<std::chrono::microseconds>(end - start).count(), filename);
 			delete[] tab4;
 		}
 	}
@@ -934,26 +1066,29 @@ int sort::testMergedSort(int m)
 	if (m == 1)
 	{
 		comp = 0; swap = 0;
-		for(int i=1;i<=5;++i)
-			sort::clearFile(i);
+		//for(int i=1;i<=5;++i)
+		//	sort::clearFile(i);
 		char* empty = "";
 		// dla wszystkich n
 		for (int i = 2; i <= 100; i += 1)
 		{
 			// wielokrotnie dla wszystkich n
-			for (int j = 0; j < 3; ++j)
+			for (int j = 0; j < 100; ++j)
 			{
-
 				double* tab1 = createTab(1, i);
 				//printTab(tab1, i);
 				double* tab2 = new double[i];
-				std::copy(tab1, tab1 + i, tab2);
+				//std::copy(tab1, tab1 + i, tab2);
+				memcpy(tab2, tab1, i * sizeof(double));
 				double* tab3 = new double[i];
-				std::copy(tab1, tab1 + i, tab3);
+				//std::copy(tab1, tab1 + i, tab3);
+				memcpy(tab3, tab1, i * sizeof(double));
 				double* tab4 = new double[i];
-				std::copy(tab1, tab1 + i, tab4);
+				//std::copy(tab1, tab1 + i, tab4);
+				memcpy(tab4, tab1, i * sizeof(double));
 				double* tab5 = new double[i];
-				std::copy(tab1, tab1 + i, tab5);
+				//std::copy(tab1, tab1 + i, tab5);
+				memcpy(tab5, tab1, i * sizeof(double));
 
 				comp = 0; swap = 0;
 				insertionSort(tab1, 0, i - 1);
@@ -988,7 +1123,7 @@ int sort::testMergedSort(int m)
 		}
 		free(empty);
 	}
-	sort::plotGnuplot(2);
+	//sort::plotGnuplot(2);
 	return 0;
 }
 
@@ -1010,7 +1145,8 @@ int sort::testSearch(int m)
 				double* tab1 = createTab(1, i);
 				printTab(tab1, i);
 				double* tab2 = new double[i];
-				std::copy(tab1, tab1 + i, tab2);
+				//std::copy(tab1, tab1 + i, tab2);
+				memcpy(tab2, tab1, i * sizeof(double));
 
 				comp = 0; swap = 0;
 				printf("%f \n", randomizedSelect(tab1, 0, i - 1, 2));
@@ -1021,7 +1157,7 @@ int sort::testSearch(int m)
 				delete[] tab1;
 
 				comp = 0; swap = 0;
-				printf("%f \n", select(tab2, 0, i - 1, 2));
+				printf("%d \n", select(tab2, 0, i - 1, 2));
 				printTab(tab2, i);
 				quickSort(tab2, 0, i - 1);
 				printTab(tab2, i);

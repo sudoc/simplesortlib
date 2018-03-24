@@ -2,11 +2,11 @@
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>
 #include <iostream>
-
+#include <fstream>
 
 sort_int::sort_int()
 {
-	srand(time(NULL));
+//	srand(time(NULL));
 }
 
 sort_int::~sort_int()
@@ -162,43 +162,27 @@ int sort_int::writeToFile(int m, int n, int c, int s)
 {
 	if (m == 6)
 	{
-		FILE *f1 = fopen("comp6.txt", "a");
-		if (f1 == NULL)
-		{
-			printf("Error opening file!\n");
-			return 1;
-		}
-		fprintf(f1, "%d %d\n", n, c);
-		fclose(f1);
+		std::ofstream f10;
+		f10.open("comp6.txt");
+		f10 << n << " " << c << std::endl;
+		f10.close();
 
-		FILE *f2 = fopen("swap6.txt", "a");
-		if (f2 == NULL)
-		{
-			printf("Error opening file!\n");
-			return 1;
-		}
-		fprintf(f2, "%d %d\n", n, s);
-		fclose(f2);
+		std::ofstream f11;
+		f11.open("swap6.txt");
+		f11 << n << " " << s << std::endl;
+		f11.close();
 	}
 	else if (m == 7)
 	{
-		FILE *f3 = fopen("comp7.txt", "a");
-		if (f3 == NULL)
-		{
-			printf("Error opening file!\n");
-			return 1;
-		}
-		fprintf(f3, "%d %d\n", n, c);
-		fclose(f3);
+		std::ofstream f12;
+		f12.open("comp7.txt");
+		f12 << n << " " << c << std::endl;
+		f12.close();
 
-		FILE *f4 = fopen("swap7.txt", "a");
-		if (f4 == NULL)
-		{
-			printf("Error opening file!\n");
-			return 1;
-		}
-		fprintf(f4, "%d %d\n", n, s);
-		fclose(f4);
+		std::ofstream f13;
+		f13.open("swap7.txt");
+		f13 << n << " " << s << std::endl;
+		f13.close();
 	}
 	return 0;
 }
@@ -207,43 +191,27 @@ int sort_int::clearFile(int m)
 {
 	if (m == 6)
 	{
-		FILE *f1 = fopen("comp6.txt", "w");
-		if (f1 == NULL)
-		{
-			printf("Error opening file!\n");
-			return 1;
-		}
-		fprintf(f1, "");
-		fclose(f1);
+		std::ofstream f14;
+		f14.open("comp6.txt");
+		f14 << "";
+		f14.close();
 
-		FILE *f2 = fopen("swap6.txt", "w");
-		if (f2 == NULL)
-		{
-			printf("Error opening file!\n");
-			return 1;
-		}
-		fprintf(f2, "");
-		fclose(f2);
+		std::ofstream f15;
+		f15.open("swap6.txt");
+		f15 << "";
+		f15.close();
 	}
 	else if (m == 7)
 	{
-		FILE *f3 = fopen("comp7.txt", "w");
-		if (f3 == NULL)
-		{
-			printf("Error opening file!\n");
-			return 1;
-		}
-		fprintf(f3, "");
-		fclose(f3);
+		std::ofstream f16;
+		f16.open("comp7.txt");
+		f16 << "";
+		f16.close();
 
-		FILE *f4 = fopen("swap7.txt", "w");
-		if (f4 == NULL)
-		{
-			printf("Error opening file!\n");
-			return 1;
-		}
-		fprintf(f4, "");
-		fclose(f4);
+		std::ofstream f17;
+		f17.open("swap7.txt");
+		f17 << "";
+		f17.close();
 	}
 	return 0;
 }
@@ -260,7 +228,7 @@ void sort_int::plotGnuplot(int m)
 	}
 }
 
-void printTab(int* tab, int n)
+void printTab(double* tab, int n)
 {
 	for (int i = 0; i < n; ++i)
 	{
