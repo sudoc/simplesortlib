@@ -10,7 +10,6 @@ private:
 
 	void swap_(int* tab, int i, int j);
 	int writeToFile(int m, int n, int c, int s, int time, char* filename);
-	int clearFile(int m);
 
 public:
 	sort_int();
@@ -22,5 +21,6 @@ public:
 	int* createTab(int m, int n);
 	void plotGnuplot(int m);
 	int testSort(int m);
+	int testSortWithStats(char* filename, int k);
 };
 

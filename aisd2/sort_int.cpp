@@ -4,6 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <random>
+#include <chrono>
 
 sort_int::sort_int()
 {
@@ -251,5 +252,44 @@ int sort_int::testSort(int m)
 		}
 	}
 	sort_int::plotGnuplot(1);
+	return 0;
+}
+
+int sort_int::testSortWithStats(char* filename, int k)
+{
+	comp = 0; swap = 0;
+
+	for (int i = 10; i <= 100000; i *= 10)
+	{
+		for (int j = 0; j < k; j++)
+		{
+			int* tab1 = createTab(1, i);
+			//printTab(tab1, i);
+
+			comp = 0; swap = 0;
+			auto start = std::chrono::high_resolution_clock::now();
+			radixSort(tab1, i - 1);
+			auto end = std::chrono::high_resolution_clock::now();
+			//printTab(tab1, i);
+			writeToFile(7, i, comp, swap, (int)std::chrono::duration_cast<std::chrono::microseconds>(end - start).count(), filename);
+			delete[] tab1;
+		}
+	}
+	for (int i = 50; i <= 100000; i *= 10)
+	{
+		for (int j = 0; j < k; j++)
+		{
+			int* tab1 = createTab(1, i);
+			//printTab(tab1, i);
+
+			comp = 0; swap = 0;
+			auto start = std::chrono::high_resolution_clock::now();
+			radixSort(tab1, i - 1);
+			auto end = std::chrono::high_resolution_clock::now();
+			//printTab(tab1, i);
+			writeToFile(7, i, comp, swap, (int)std::chrono::duration_cast<std::chrono::microseconds>(end - start).count(), filename);
+			delete[] tab1;
+		}
+	}
 	return 0;
 }

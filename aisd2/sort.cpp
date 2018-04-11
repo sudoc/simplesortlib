@@ -1111,13 +1111,13 @@ int sort::testMergedSort(int m)
 				comp = 0; swap = 0;
 				quickSortWithInsertionSort(tab4, 0, i - 1);
 				//printTab(tab4, i);
-				sort::writeToFile(4, i, comp, swap, empty);
+				sort::writeToFile(5, i, comp, swap, empty);
 				delete[] tab4;
 
 				comp = 0; swap = 0;
 				mergeSortWithInsertionSort(tab5, 0, i - 1);
 				//printTab(tab5, i);
-				sort::writeToFile(5, i, comp, swap, empty);
+				sort::writeToFile(6, i, comp, swap, empty);
 				delete[] tab5;
 			}
 		}
