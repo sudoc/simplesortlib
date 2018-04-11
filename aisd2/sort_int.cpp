@@ -1,8 +1,9 @@
 #include "sort_int.h"
 #include <stdlib.h>     /* srand, rand */
-#include <time.h>
+//#include <time.h>
 #include <iostream>
 #include <fstream>
+#include <random>
 
 sort_int::sort_int()
 {
@@ -11,6 +12,15 @@ sort_int::sort_int()
 
 sort_int::~sort_int()
 {
+}
+
+int getRand(const int& A, const int& B) {
+	static std::random_device randDev;
+	static std::mt19937 twister(randDev());
+	static std::uniform_int_distribution<int> dist;
+
+	dist.param(std::uniform_int_distribution<int>::param_type(A, B));
+	return dist(twister);
 }
 
 void sort_int::swap_(int* tab, int i, int j)
@@ -119,7 +129,7 @@ int* sort_int::createTab(int m, int n)
 	{
 		for (int i = 0; i < n; ++i)
 		{
-			tab[i] = rand();
+			tab[i] = getRand(0, 10000);
 		}
 	}
 	//ciagi posortowane
@@ -127,7 +137,7 @@ int* sort_int::createTab(int m, int n)
 	{
 		for (int i = 0; i < n; ++i)
 		{
-			tab[i] = rand();
+			tab[i] = getRand(0, 10000);
 		}
 		radixSort(tab, n);
 	}
@@ -136,7 +146,7 @@ int* sort_int::createTab(int m, int n)
 	{
 		for (int i = 0; i < n; ++i)
 		{
-			tab[i] = rand();
+			tab[i] = getRand(0, 10000);
 		}
 		radixSort(tab, n);
 		int j = n;
@@ -158,61 +168,42 @@ int* sort_int::createTab(int m, int n)
 	return tab;
 }
 
-int sort_int::writeToFile(int m, int n, int c, int s)
+/* m - algo
+* n - ilosc elementow
+* c - comp
+* s - swap
+* t - time
+* filename - file name
+*/
+int sort_int::writeToFile(int m, int n, int c, int s, int time, char* filename)
 {
-	if (m == 6)
-	{
-		std::ofstream f10;
-		f10.open("comp6.txt");
-		f10 << n << " " << c << std::endl;
-		f10.close();
+	char* out = (char*)malloc(sizeof(char*) * 10);
 
-		std::ofstream f11;
-		f11.open("swap6.txt");
-		f11 << n << " " << s << std::endl;
-		f11.close();
-	}
-	else if (m == 7)
-	{
-		std::ofstream f12;
-		f12.open("comp7.txt");
-		f12 << n << " " << c << std::endl;
-		f12.close();
+	sprintf_s(out, 10 * sizeof(out), "%s%s%02d%s", filename, "_X", m, ".txt");
+	std::ofstream f10;
+	f10.open(out, std::ios_base::app);
+	f10 << n << std::endl;
+	f10.close();
+	
+	sprintf_s(out, 10 * sizeof(out), "%s%s%02d%s", filename, "_compY", m, ".txt");
+	std::ofstream f11;
+	f11.open(out, std::ios_base::app);
+	f11 << c << std::endl;
+	f11.close();
 
-		std::ofstream f13;
-		f13.open("swap7.txt");
-		f13 << n << " " << s << std::endl;
-		f13.close();
-	}
-	return 0;
-}
+	sprintf_s(out, 10 * sizeof(out), "%s%s%02d%s", filename, "_swapY", m, ".txt");
+	std::ofstream f12;
+	f12.open(out, std::ios_base::app);
+	f12 << s << std::endl;
+	f12.close();
 
-int sort_int::clearFile(int m)
-{
-	if (m == 6)
-	{
-		std::ofstream f14;
-		f14.open("comp6.txt");
-		f14 << "";
-		f14.close();
+	sprintf_s(out, 10 * sizeof(out), "%s%s%02d%s", filename, "_timeY", m, ".txt");
+	std::ofstream f13;
+	f13.open(out, std::ios_base::app);
+	f13 << time << std::endl;
+	f13.close();
 
-		std::ofstream f15;
-		f15.open("swap6.txt");
-		f15 << "";
-		f15.close();
-	}
-	else if (m == 7)
-	{
-		std::ofstream f16;
-		f16.open("comp7.txt");
-		f16 << "";
-		f16.close();
-
-		std::ofstream f17;
-		f17.open("swap7.txt");
-		f17 << "";
-		f17.close();
-	}
+	free(out);
 	return 0;
 }
 
@@ -241,7 +232,7 @@ int sort_int::testSort(int m)
 	if (m == 1)
 	{
 		comp = 0; swap = 0;
-		clearFile(6);
+		//clearFile(6);
 		// dla wszystkich n
 		for (int i = 100; i <= 100000; i += 100)
 		{
@@ -254,7 +245,7 @@ int sort_int::testSort(int m)
 				comp = 0; swap = 0;
 				radixSort(tab1, i - 1);
 				//printTab(tab1, i);
-				sort_int::writeToFile(6, i, comp, swap);
+				//sort_int::writeToFile(6, i, comp, swap);
 				delete[] tab1;
 			}
 		}
