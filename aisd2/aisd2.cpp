@@ -1,9 +1,10 @@
 // aisd2.cpp : Defines the entry point for the console application.
 //
 
-#include "stdafx.h"
+//#include "stdafx.h"
 #include "sort.h"
 #include "sort_int.h"
+#include <iostream>
 
 int main(int argc, char* argv[])
 {
@@ -92,7 +93,7 @@ int main(int argc, char* argv[])
 	//sort.testMergedSort(1);
 	//sort.testSearch(1);
 	//sort_int.testSort(1);
-	getchar();
+	//getchar();
 	return 0;
 }
 
