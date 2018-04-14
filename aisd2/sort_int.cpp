@@ -5,6 +5,10 @@
 #include <fstream>
 #include <random>
 #include <chrono>
+#ifdef WIN32
+#include "windows.h"
+#include "psapi.h"
+#endif
 
 sort_int::sort_int()
 {
@@ -15,7 +19,7 @@ sort_int::~sort_int()
 {
 }
 
-int getRand(const int& A, const int& B) {
+int getRand2(const int& A, const int& B) {
 	static std::random_device randDev;
 	static std::mt19937 twister(randDev());
 	static std::uniform_int_distribution<int> dist;
@@ -130,7 +134,7 @@ int* sort_int::createTab(int m, int n)
 	{
 		for (int i = 0; i < n; ++i)
 		{
-			tab[i] = getRand(0, 10000);
+			tab[i] = getRand2(0, 10000);
 		}
 	}
 	//ciagi posortowane
@@ -138,7 +142,7 @@ int* sort_int::createTab(int m, int n)
 	{
 		for (int i = 0; i < n; ++i)
 		{
-			tab[i] = getRand(0, 10000);
+			tab[i] = getRand2(0, 10000);
 		}
 		radixSort(tab, n);
 	}
@@ -147,7 +151,7 @@ int* sort_int::createTab(int m, int n)
 	{
 		for (int i = 0; i < n; ++i)
 		{
-			tab[i] = getRand(0, 10000);
+			tab[i] = getRand2(0, 10000);
 		}
 		radixSort(tab, n);
 		int j = n;
@@ -176,7 +180,7 @@ int* sort_int::createTab(int m, int n)
 * t - time
 * filename - file name
 */
-int sort_int::writeToFile(int m, int n, int c, int s, int time, char* filename)
+int sort_int::writeToFile(int m, int n, int c, int s, int time, char* filename, int mem)
 {
 	char* out = (char*)malloc(sizeof(char*) * 10);
 
@@ -203,6 +207,12 @@ int sort_int::writeToFile(int m, int n, int c, int s, int time, char* filename)
 	f13.open(out, std::ios_base::app);
 	f13 << time << std::endl;
 	f13.close();
+
+	sprintf_s(out, 10 * sizeof(out), "%s%s%02d%s", filename, "_memoY", m, ".txt");
+	std::ofstream f14;
+	f14.open(out, std::ios_base::app);
+	f14 << mem << std::endl;
+	f14.close();
 
 	free(out);
 	return 0;
@@ -258,7 +268,10 @@ int sort_int::testSort(int m)
 int sort_int::testSortWithStats(char* filename, int k)
 {
 	comp = 0; swap = 0;
-
+	int mem_diff = 0;
+#ifdef WIN32
+	PROCESS_MEMORY_COUNTERS_EX pmc;
+#endif
 	for (int i = 10; i <= 100000; i *= 10)
 	{
 		for (int j = 0; j < k; j++)
@@ -267,11 +280,20 @@ int sort_int::testSortWithStats(char* filename, int k)
 			//printTab(tab1, i);
 
 			comp = 0; swap = 0;
+#ifdef WIN32	
+			GetProcessMemoryInfo(GetCurrentProcess(), (PROCESS_MEMORY_COUNTERS*)&pmc, sizeof(pmc));
+			SIZE_T virtualMemUsedByMe1 = pmc.PrivateUsage;
+#endif
 			auto start = std::chrono::high_resolution_clock::now();
 			radixSort(tab1, i - 1);
 			auto end = std::chrono::high_resolution_clock::now();
 			//printTab(tab1, i);
-			writeToFile(7, i, comp, swap, (int)std::chrono::duration_cast<std::chrono::microseconds>(end - start).count(), filename);
+#ifdef WIN32
+			GetProcessMemoryInfo(GetCurrentProcess(), (PROCESS_MEMORY_COUNTERS*)&pmc, sizeof(pmc));
+			SIZE_T virtualMemUsedByMe2 = pmc.PrivateUsage;
+			mem_diff = virtualMemUsedByMe2 - virtualMemUsedByMe1;
+#endif
+			writeToFile(7, i, comp, swap, (int)std::chrono::duration_cast<std::chrono::microseconds>(end - start).count(), filename, mem_diff);
 			delete[] tab1;
 		}
 	}
@@ -283,11 +305,20 @@ int sort_int::testSortWithStats(char* filename, int k)
 			//printTab(tab1, i);
 
 			comp = 0; swap = 0;
+#ifdef WIN32
+			GetProcessMemoryInfo(GetCurrentProcess(), (PROCESS_MEMORY_COUNTERS*)&pmc, sizeof(pmc));
+			SIZE_T virtualMemUsedByMe1 = pmc.PrivateUsage;
+#endif
 			auto start = std::chrono::high_resolution_clock::now();
 			radixSort(tab1, i - 1);
 			auto end = std::chrono::high_resolution_clock::now();
 			//printTab(tab1, i);
-			writeToFile(7, i, comp, swap, (int)std::chrono::duration_cast<std::chrono::microseconds>(end - start).count(), filename);
+#ifdef WIN32
+			GetProcessMemoryInfo(GetCurrentProcess(), (PROCESS_MEMORY_COUNTERS*)&pmc, sizeof(pmc));
+			SIZE_T virtualMemUsedByMe2 = pmc.PrivateUsage;
+			mem_diff = virtualMemUsedByMe2 - virtualMemUsedByMe1;
+#endif
+			writeToFile(7, i, comp, swap, (int)std::chrono::duration_cast<std::chrono::microseconds>(end - start).count(), filename, mem_diff);
 			delete[] tab1;
 		}
 	}

@@ -17,6 +17,8 @@ int main(int argc, char* argv[])
 	char* filename = "";
 	// ammount of replays (in stat mode)
 	int k = 0;
+	// data type (for searching)
+	int data_type = 0;
 	// parse args
 	for (int i = 1; i < argc; i++)
 	{
@@ -56,15 +58,31 @@ int main(int argc, char* argv[])
 			stat = 1;
 			i = i + 2;
 		}
+		else if (strcmp(argv[i], "--r") == 0)
+		{
+			data_type = 1;
+		}
+		else if (strcmp(argv[i], "--p") == 0)
+		{
+			data_type = 4;
+		}
 	}
 	sort sort;
+	sort_int sort_int;
 	if (stat == 0)
 	{
-		sort.testSortWithoutStats(algo, order);
-
+		if (data_type == 0)
+			if (algo == 0 || order == 0)
+				return sort.testBinarySearchWithoutStats();
+			else
+				sort.testSortWithoutStats(algo, order);
+		else
+			sort.testSearchWithoutStats(data_type);
 	}
 	else if (stat == 1)
 	{
+		sort.testSortWithStats(filename, k);
+		sort_int.testSortWithStats(filename, k);
 		sort.testSortWithStats(filename, k);
 	}
 	//free (filename);

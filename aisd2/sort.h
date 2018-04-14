@@ -40,8 +40,9 @@ public:
 	void quickSortWithInsertionSort(double* tab, int l, int r);
 	void mergeSortWithInsertionSort(double* tab, int p, int r);
 
-	double randomizedSelect(double* tab, int l, int r, int k);
+	int randomizedSelect(double* tab, int l, int r, int k);
 	int select(double* tab, int l, int r, int k);
+	int binarySearch(double* tab, int l, int r, double v);
 
 	double* createTab(int m, int n);
 	void plotGnuplot(int m);
@@ -52,5 +53,8 @@ public:
 	int testMergedSort(int m);
 
 	int testSearch(int m);
+	int testSearchWithoutStats(int data_type);
+	int testBinarySearchWithoutStats();
+	int testSearchWithStats(char* filename, int k);
 };
 

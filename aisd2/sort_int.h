@@ -9,7 +9,7 @@ private:
 	int swap;
 
 	void swap_(int* tab, int i, int j);
-	int writeToFile(int m, int n, int c, int s, int time, char* filename);
+	int writeToFile(int m, int n, int c, int s, int time, char* filename, int mem);
 
 public:
 	sort_int();

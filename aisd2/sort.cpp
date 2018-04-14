@@ -9,6 +9,7 @@
 #include <fstream>
 #include <iterator>
 
+
 sort::sort()
 {
 	//srand(time(NULL));
@@ -18,13 +19,19 @@ sort::~sort()
 {
 }
 
-int getRand(const int& A, const int& B) {
+std::mt19937 getRandomEngine()
+{
 	static std::random_device randDev;
 	static std::mt19937 twister(randDev());
+	return twister;
+}
+
+int getRand(const int& A, const int& B) 
+{
 	static std::uniform_int_distribution<int> dist;
 
 	dist.param(std::uniform_int_distribution<int>::param_type(A, B));
-	return dist(twister);
+	return dist(getRandomEngine());
 }
 
 void sort::insertionSort(double* tab, int l, int r)
@@ -536,13 +543,18 @@ void sort::dualPivotQuickSort(double* tab, int l, int r)
 int chooseRandomDividePoint(int l, int r)
 {
 	//element losowy z przedzialu
-	return (int)floor(rand() % (r - l + 1)) + l;
+	//return (int)floor(rand() % (r - l + 1)) + l;
+	return getRand(l, r);
 }
 
 int sort::randomizedSelectDivide(double* tab, int l, int r)
 {
 	int pivot = chooseRandomDividePoint(l, r);
 	double pivotValue = tab[pivot];
+#ifdef DEBUG
+	std::cerr << "Swap random pivot tab[" << pivot << "] with tab[" \
+		<< r << "]" << std::endl;
+#endif
 	//pivot na koniec
 	sort::swap_(tab, pivot, r); ++swap;
 	//zacznij od poczatku
@@ -553,24 +565,32 @@ int sort::randomizedSelectDivide(double* tab, int l, int r)
 		//jezeli pivot jest wiekszy od danego elem.
 		if (tab[i] < pivotValue && ++comp)
 		{
+#ifdef DEBUG
+			std::cerr << "Swap tab[" << i << "] with tab[" \
+				<< position << "]" << std::endl;
+#endif
 			//przenies elem. na lewa strone
 			sort::swap_(tab, i, position); ++swap;
 			//przesun pozycje
 			++position;
 		}
 	}
+#ifdef DEBUG
+	std::cerr << "Swap pivot tab[" << position << "] with tab[" \
+		<< r << "]" << std::endl;
+#endif
 	//przywroc pivot na swoje miejsce
 	sort::swap_(tab, position, r); ++swap;
 	return position;
 }
 
-double sort::randomizedSelect(double* tab, int l, int r, int k)
+int sort::randomizedSelect(double* tab, int l, int r, int k)
 {
 	//jezeli w zakresie jest tylko jeden element
 	if (l >= r)
-		return tab[l];
+		return l;
 	//idiotoodpornosc (k poza zakresem)
-	if (r - k <= l)
+	if (r - k < l)
 		return NULL;
 
 	if (l < r)
@@ -579,14 +599,36 @@ double sort::randomizedSelect(double* tab, int l, int r, int k)
 		int mid = randomizedSelectDivide(tab, l, r);
 		//poprawka na zakres
 		int i = mid - l + 1;
+#ifdef DEBUG
+		std::cerr << "New candidate: " << i << " ";
+#endif
 		//jezeli element zostal znaleziony
 		if (i == k)
-			return tab[mid];
-		//jezeli element jest w lewej czesci
+		{
+#ifdef DEBUG
+			std::cerr << "is okey return" << std::endl;
+#endif
+			return mid;
+		}
+			//jezeli element jest w lewej czesci
 		else if (k < i)
+		{
+#ifdef DEBUG
+			std::cerr << "is in left" << std::endl << "Divide tab[" \
+				<< l << ":" << r << "] to tab[" << l << ":" << \
+				mid - 1 << "]" << std::endl;
+#endif
 			return randomizedSelect(tab, l, mid - 1, k);
+		}
 		else //jezeli w prawej
+		{
+#ifdef DEBUG
+			std::cerr << "is in right" << std::endl << "Divide tab[" \
+				<< l << ":" << r << "] to tab[" << mid + 1 << ":" << \
+				r << "]" << std::endl;
+#endif
 			return randomizedSelect(tab, mid + 1, r, k - i);
+		}
 	}
 	return NULL;
 }
@@ -605,9 +647,19 @@ int sort::chooseMedianDividePoint(double* tab, int l, int r)
 	//jezeli jest mniej niz 5 elementow 
 	//wykonaj insertion sort i zwroc mediane
 	if (r - l < 5)
+	{
+#ifdef DEBUG
+		std::cerr << "choosing median divde point: elements ammount < 5 "\
+			<< "insertion sort them and return median" << std::endl;
+#endif
 		return medianOfFive(tab, l, r);
+	}
 
 	int last;
+#ifdef DEBUG
+	std::cerr << "choosing median divde point: elements ammount > 5 "\
+		<< "count medians of 5-el sub-groups" << std::endl;
+#endif
 	//policz mediany wszystkich piecioelementowych podgrup
 	//i przenies je na poczatek przedzialu
 	for (int i = l; i < r; i = i + 4)
@@ -619,8 +671,12 @@ int sort::chooseMedianDividePoint(double* tab, int l, int r)
 			last = r; //cofnij
 		//policz mediane podgrupy
 		int median5 = medianOfFive(tab, i, last);
+#ifdef DEBUG
+		std::cerr << "Swap tab[" << median5 << "] with tab[" \
+			<< l + (int)floor((i - l) / 5) << "]" << std::endl;
+#endif
 		//przenies ja na poczatek przedzialu
-		swap_(tab, median5, l + (int)floor((i - l) / 5)); ++swap;
+		sort::swap_(tab, median5, l + (int)floor((i - l) / 5)); ++swap;
 	}
 	//policz mediane wszystkich median z podgrup 
 	return select(tab, l, l + (int)ceil((r - l) / 5) - 1, l + (r - l) / 10);
@@ -630,6 +686,10 @@ int sort::selectDivide(double* tab, int l, int r, int pivot)
 {
 	//int pivot = chooseMedianDividePoint(l, r);
 	double pivotValue = tab[pivot];
+#ifdef DEBUG
+	std::cerr << "Swap pivot tab[" << pivot << "] with tab[" \
+		<< r << "]" << std::endl;
+#endif
 	//pivot na koniec
 	sort::swap_(tab, pivot, r); ++swap;
 	//zacznij od poczatku
@@ -640,12 +700,20 @@ int sort::selectDivide(double* tab, int l, int r, int pivot)
 		//jezeli pivot jest wiekszy od danego elem.
 		if (tab[i] < pivotValue && ++comp)
 		{
+#ifdef DEBUG
+			std::cerr << "Swap tab[" << i << "] with tab[" \
+				<< position << "]" << std::endl;
+#endif
 			//przenies elem. na lewa strone
 			sort::swap_(tab, i, position); ++swap;
 			//przesun pozycje
 			++position;
 		}
 	}
+#ifdef DEBUG
+	std::cerr << "Swap pivot tab[" << position << "] with tab[" \
+		<< r << "]" << std::endl;
+#endif
 	//przywroc pivot na swoje miejsce
 	sort::swap_(tab, position, r); ++swap;
 	return position;
@@ -657,18 +725,58 @@ int sort::select(double* tab, int l, int r, int k)
 		return l;
 	//wybieramy pivota za pomoca mediany median
 	int pivot = chooseMedianDividePoint(tab, l, r);
+#ifdef DEBUG
+	std::cerr << "New median of medians pivot: " << pivot << std::endl;
+#endif
 	//dzielimy tablice wzgledem znalezionego pivota
 	pivot = selectDivide(tab, l, r, pivot);
 
+#ifdef DEBUG
+	std::cerr << "New candidate: " << pivot << " ";
+#endif
 	//pivot jest rozwiazaniem
 	if (k == pivot)
+	{
+#ifdef DEBUG
+		std::cerr << "is okey return" << std::endl;
+#endif
 		return k;
+	}
 	//pivot jest wiekszy od poszukiwanej statystki poz.
 	else if (k < pivot)
+	{
+#ifdef DEBUG
+		std::cerr << "is in left" << std::endl << "Divide tab[" \
+			<< l << ":" << r << "] to tab[" << l << ":" << \
+			pivot - 1 << "]" << std::endl;
+#endif
 		return select(tab, l, pivot - 1, k);
+	}
 	//pivot jest mniejszy ..
 	else
+	{
+#ifdef DEBUG
+		std::cerr << "is in right" << std::endl << "Divide tab[" \
+			<< l << ":" << r << "] to tab[" << pivot + 1 << ":" << \
+			r << "]" << std::endl;
+#endif
 		return select(tab, pivot + 1, r, k);
+	}
+}
+
+int sort::binarySearch(double* tab, int l, int r, double v)
+{
+	if (l > r)
+		return NULL;
+
+	int mid = (l + r) / 2;
+
+	if (v == tab[mid])
+		return mid;
+	if (v < tab[mid])
+		return binarySearch(tab, l, mid - 1, v);
+	else
+		return binarySearch(tab, mid + 1, r, v);
 }
 
 /*
@@ -677,6 +785,7 @@ int sort::select(double* tab, int l, int r, int k)
 		1 - ciagi losowe
 		2 - ciagi posortowane
 		3 - ciagi posortowane malejaco
+		4 - permutacja ciagu od 1 do n
 		dowolna wartosc - ciagi zer
 	n - wielkosc tablicy
 	zwracana wartosc:
@@ -720,6 +829,16 @@ double* sort::createTab(int m, int n)
 			swap_(tab, i, j);
 			--j;
 		}
+	}
+	//permutacja ciagu od 1 do n
+	if (m == 4)
+	{
+		for (int i = 0; i < n; ++i)
+		{
+			tab[i] = i + 1;
+		}
+		std::shuffle(&tab[0], &tab[n-1], getRandomEngine());
+
 	}
 	//tryb niezdefiniowany ciagi zer
 	else
@@ -1149,7 +1268,7 @@ int sort::testSearch(int m)
 				memcpy(tab2, tab1, i * sizeof(double));
 
 				comp = 0; swap = 0;
-				printf("%f \n", randomizedSelect(tab1, 0, i - 1, 2));
+				printf("%d \n", randomizedSelect(tab1, 0, i - 1, 2));
 				printTab(tab2, i);
 				quickSort(tab2, 0, i - 1);
 				printTab(tab2, i);
@@ -1167,5 +1286,202 @@ int sort::testSearch(int m)
 		}
 	}
 	sort::plotGnuplot(3);
+	return 0;
+}
+
+int sort::testSearchWithoutStats(int data_type)
+{
+	// get size of tab
+	int n = 0;
+	std::cin >> n;
+	// get searching point
+	int k_th = 0;
+	std::cin >> k_th;
+	// result point
+	int result = 0;
+
+	std::chrono::time_point<std::chrono::steady_clock> start, end;
+	// create tab of desired size and data type
+	// then run algorithms
+	double* tab1 = createTab(data_type, n);
+	double* tab2 = new double[n];
+	memcpy(tab2, tab1, n * sizeof(double));
+
+#ifdef DEBUG
+	// print on stdout tab values
+	for (int i = 0; i < n; i++)
+	{
+		std::cout << tab1[i] << " ";
+	}
+	std::cout << std::endl;
+#endif
+
+	// RANDOMIZED SELECT
+	comp = 0; swap = 0;
+	start = std::chrono::high_resolution_clock::now();
+	result = sort::randomizedSelect(tab1, 0, n - 1, k_th);
+	end = std::chrono::high_resolution_clock::now();
+
+	// print algo time on stderr
+#ifdef DEBUG
+	std::cerr << "DEBUG FLAG ENABLED TIME ONLY IN APROXIMATION" << std::endl;
+#endif
+	std::cerr << "Time: ";
+	std::cerr << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+	std::cerr << "us" << std::endl;
+	// print comp and swap on stderr
+	std::cerr << "Comp: " << comp << " Swap: " \
+		<< swap << std::endl;
+	// print on stdout n
+	std::cout << n << std::endl;
+	// print on stdout tab values
+	// with marked k-th value
+	for (int i = 0; i < result; i++)
+	{
+		std::cout << tab1[i] << " ";
+	}
+	std::cout << "[" << tab1[result] << "] ";
+	for (int i = result + 1; i < n; i++)
+	{
+		std::cout << tab1[i] << " ";
+	}
+	std::cout << std::endl;
+
+	delete[] tab1;
+
+	// SELECT
+	comp = 0; swap = 0;
+	start = std::chrono::high_resolution_clock::now();
+	result = sort::select(tab2, 0, n - 1, k_th-1);
+	end = std::chrono::high_resolution_clock::now();
+
+	// print algo time on stderr
+#ifdef DEBUG
+	std::cerr << "DEBUG FLAG ENABLED TIME ONLY IN APROXIMATION" << std::endl;
+#endif
+	std::cerr << "Time: ";
+	std::cerr << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+	std::cerr << "us" << std::endl;
+	// print comp and swap on stderr
+	std::cerr << "Comp: " << comp << " Swap: " \
+		<< swap << std::endl;
+	// output would not be same
+	// but we have to be strict with
+	// spec so dont print in normal mode
+#ifdef DEBUG
+	// print on stdout tab values
+	// with marked k-th value
+	for (int i = 0; i < result; i++)
+	{
+		std::cout << tab2[i] << " ";
+	}
+	std::cout << "[" << tab2[result] << "] ";
+	for (int i = result + 1; i < n; i++)
+	{
+		std::cout << tab2[i] << " ";
+	}
+	std::cout << std::endl;
+#endif
+	delete[] tab2;
+
+	return 0;
+}
+
+int sort::testBinarySearchWithoutStats()
+{
+	// get size of tab
+	int n = 0;
+	std::cin >> n;
+	// get searching value
+	double v = 0;
+	std::cin >> v;
+	// result value
+	int result = 0;
+
+	// create tab of desired size
+	double* tab = new double[n + 1];
+	// populate tab with values from user
+	for (int i = 0; i < n; i++)
+	{
+		std::cin >> tab[i];
+	}
+
+	std::chrono::time_point<std::chrono::steady_clock> start, end;
+#ifdef DEBUG
+	// print on stdout tab values
+	for (int i = 0; i < n; i++)
+	{
+		std::cout << tab[i] << " ";
+	}
+	std::cout << std::endl;
+#endif
+
+	comp = 0; swap = 0;
+	start = std::chrono::high_resolution_clock::now();
+	result = sort::binarySearch(tab, 0, n - 1, v);
+	end = std::chrono::high_resolution_clock::now();
+
+	// print algo time on stderr
+#ifdef DEBUG
+	std::cerr << "DEBUG FLAG ENABLED TIME ONLY IN APROXIMATION" << std::endl;
+#endif
+	std::cerr << "Time: ";
+	std::cerr << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+	std::cerr << "us" << std::endl;
+	// print comp and swap on stderr
+	std::cerr << "Comp: " << comp << " Swap: " \
+		<< swap << std::endl;
+
+
+	delete[] tab;
+
+	if (result == NULL)
+		return 0;
+	else
+		return 1;
+}
+
+int sort::testSearchWithStats(char* filename, int k)
+{
+	comp = 0; swap = 0;
+	//for (int i = 1; i <= 3; ++i)
+	//sort::clearFile(i);
+
+	for (int i = 1000; i <= 100000; i += 1000)
+	{
+		for (int j = 0; j < k; j++)
+		{
+			double* tab1 = createTab(1, i);
+			//printTab(tab1, i);
+			double* tab2 = new double[i];
+			memcpy(tab2, tab1, i * sizeof(double));
+			double* tab3 = new double[i];
+			memcpy(tab3, tab1, i * sizeof(double));
+
+			comp = 0; swap = 0;
+			auto start = std::chrono::high_resolution_clock::now();
+			randomizedSelect(tab1, 0, i - 1, getRand(1, i - 1));
+			auto end = std::chrono::high_resolution_clock::now();
+			//printTab(tab1, i);
+			sort::writeToFile(8, i, comp, swap, (int)std::chrono::duration_cast<std::chrono::microseconds>(end - start).count(), filename);
+			delete[] tab1;
+
+			comp = 0; swap = 0;
+			start = std::chrono::high_resolution_clock::now();
+			select(tab2, 0, i - 1, getRand(1, i - 1));
+			end = std::chrono::high_resolution_clock::now();
+			//printTab(tab2, i);
+			sort::writeToFile(9, i, comp, swap, (int)std::chrono::duration_cast<std::chrono::microseconds>(end - start).count(), filename);
+			delete[] tab2;
+
+			comp = 0; swap = 0;
+			start = std::chrono::high_resolution_clock::now();
+			binarySearch(tab3, 0, i - 1, getRand(1, i - 1));
+			end = std::chrono::high_resolution_clock::now();
+			//printTab(tab3, i);
+			sort::writeToFile(10, i, comp, swap, (int)std::chrono::duration_cast<std::chrono::microseconds>(end - start).count(), filename);
+			delete[] tab3;
+		}
+	}
 	return 0;
 }
