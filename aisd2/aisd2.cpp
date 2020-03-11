@@ -38,19 +38,27 @@ int main(int argc, char* argv[])
 			{
 				algo = 3;
 			}
+			else if (strcmp(argv[i + 1], "select") == 0)
+			{
+				algo = 4;
+			}
+			else if (strcmp(argv[i + 1], "heap") == 0)
+			{
+				algo = 5;
+			}
+			else if (strcmp(argv[i + 1], "mquick") == 0)
+			{
+				algo = 6;
+			}
 			i++;
 		}
-		else if (strcmp(argv[i], "--comp") == 0)
+		else if (strcmp(argv[i], "--asc") == 0)
 		{
-			if (strcmp(argv[i + 1], ">=") == 0)
-			{
-				order = 1;
-			}
-			else if (strcmp(argv[i + 1], "<=") == 0)
-			{
-				order = 2;
-			}
-			i++;
+			order = 1;
+		}
+		else if (strcmp(argv[i], "--desc") == 0)
+		{
+			order = 2;
 		}
 		else if (strcmp(argv[i], "--stat") == 0)
 		{
@@ -83,8 +91,8 @@ int main(int argc, char* argv[])
 	else if (stat == 1)
 	{
 		sort.testSortWithStats(filename, k);
-		sort_int.testSortWithStats(filename, k);
-		sort.testSortWithStats(filename, k);
+		//sort_int.testSortWithStats(filename, k);
+		//sort.testSortWithStats(filename, k);
 	}
 	//free (filename);
 	//sort sort;

@@ -1,6 +1,6 @@
 #include "sort.h"
 //#include <stdlib.h>     /* srand, rand */
-//#include <time.h>
+#include <time.h>
 #include <iostream>
 #include <random>
 #include <iomanip>
@@ -22,11 +22,11 @@ sort::~sort()
 std::mt19937 getRandomEngine()
 {
 	static std::random_device randDev;
-	static std::mt19937 twister(randDev());
+	std::mt19937 twister(randDev());
 	return twister;
 }
 
-int getRand(const int& A, const int& B) 
+int sort::getRand(const int& A, const int& B) 
 {
 	static std::uniform_int_distribution<int> dist;
 
@@ -53,6 +53,7 @@ void sort::insertionSort(double* tab, int l, int r)
 		for (j = i - 1; j >= 0 && tab[j] > key && ++comp; j--)
 		{
 			tab[j + 1] = tab[j];
+			
 #ifdef DEBUG
 			std::cerr << "Set tab[" << j + 1 << "] = tab[" << j << "]" << std::endl;
 #endif
@@ -447,6 +448,105 @@ void sort::quickSortWithInsertionSort(double* tab, int l, int r)
 	}
 }
 
+int sort::chooseDividePointMedian(double *tab, int l, int r)
+{
+	if (r == l)
+		return l;
+
+	//element w polowie
+	int k = l + (r - l) / 2;
+
+	//mediana elementu srodkowego, ostatniego i pierwszego
+	if (tab[l] <= tab[r])
+	{
+		if (tab[k] <= tab[l] && comp++)
+			return l;
+		else if (tab[k] <= tab[r] && comp++)
+			return k;
+		else
+			return r;
+	}
+	else
+	{
+		if (tab[k] <= tab[r] && comp++)
+			return r;
+		else if (tab[k] <= tab[l] && comp++)
+			return k;
+		else
+			return l;
+	}
+}
+
+int sort::quickSortDivideMedian(double* tab, int l, int r)
+{
+	int pivot = chooseDividePointMedian(tab, l, r);
+	double pivotValue = tab[pivot];
+#ifdef DEBUG
+	std::cerr << "Swap pivot tab[" << pivot << "] with tab[" \
+		<< r << "]" << std::endl;
+#endif
+	//pivot na koniec
+	sort::swap_(tab, pivot, r); ++swap;
+	//zacznij od poczatku
+	int position = l;
+	//przejdz po wszystkich elementach
+	for (int i = l; i < r; i++)
+	{
+		//jezeli pivot jest wiekszy od danego elem.
+		if (tab[i] < pivotValue && ++comp)
+		{
+#ifdef DEBUG
+			std::cerr << "Swap tab[" << i << "] with tab[" \
+				<< position << "]" << std::endl;
+#endif
+			//przenies elem. na lewa strone
+			sort::swap_(tab, i, position); ++swap;
+			//przesun pozycje
+			++position;
+		}
+	}
+#ifdef DEBUG
+	std::cerr << "Swap pivot tab[" << position << "] with tab[" \
+		<< r << "]" << std::endl;
+#endif
+	//przywroc pivot na swoje miejsce
+	sort::swap_(tab, position, r); ++swap;
+	return position;
+}
+
+void sort::quickSortWithInsertionSortAndMedian(double* tab, int l, int r)
+{
+	int j = r - l;
+	//jezeli jest jakis element
+	if (j <= 0)
+		return;
+	else if (j < 16)
+	{
+#ifdef DEBUG
+		std::cerr << "tab really small run insertion sort on tab[" << l << \
+			":" << r << "]" << std::endl;
+#endif
+		insertionSort(tab, l, r);
+	}
+	else
+	{
+		//podziel problem na pol i zapamietaj punkt
+		int i = quickSortDivideMedian(tab, l, r);
+#ifdef DEBUG
+		std::cerr << "Divide tab[" << l << ":" << r << "] to tab[" << l << \
+			":" << i - 1 << "]" << std::endl;
+#endif
+		//sortuj lewa czesc
+		quickSortWithInsertionSortAndMedian(tab, l, i - 1);
+#ifdef DEBUG
+		std::cerr << "Divide tab[" << l << ":" << r << "] to tab[" \
+			<< i + 1 << ":" << r << "]" << std::endl;
+#endif
+		//sortuj prawa czesc
+		quickSortWithInsertionSortAndMedian(tab, i + 1, r);
+	}
+}
+
 int sort::dualPivotQuickSortDivide(double* tab, int l, int r, int* lpivot)
 {
 	//jezeli pivot lewy jest wiekszy od prawego to je zamien
@@ -540,11 +640,212 @@ void sort::dualPivotQuickSort(double* tab, int l, int r)
 	}
 }
 
-int chooseRandomDividePoint(int l, int r)
+void sort::selectionSort(double* tab, int l, int r)
+{
+	int n = r - l;
+	if (n <= 0)
+		return;
+
+	// key is an index of minimal value 
+	int key;
+
+	for (int i = l; i < n; i++)
+	{
+		// Find the minimum element in unsorted array 
+#ifdef DEBUG
+		std::cerr << "Set key = tab[" << i << "]" << std::endl;
+#endif
+		key = i;
+
+		for (int j = i + 1; j <= n; j++)
+			if (tab[j] < tab[key] && comp++)
+			{
+#ifdef DEBUG
+				std::cerr << "Set key = tab[" << j << "]" << std::endl;
+#endif
+				key = j;
+			}
+
+		// swap minimum element with the first unsorted one
+#ifdef DEBUG
+		std::cerr << "Swap tab[" << i << "] with tab[" \
+			<< key << "]" << std::endl;
+#endif
+		sort::swap_(tab, key, i); swap++;
+
+	}
+}
+
+void sort::selectionSortReverse(double* tab, int l, int r)
+{
+	int n = r - l;
+	if (n <= 0)
+		return;
+
+	// key is an index of maximal value 
+	int key;
+
+	for (int i = l; i < n; i++)//n; i >= l + 1; i--)
+	{
+		// find the maximum element in unsorted array 
+#ifdef DEBUG
+		std::cerr << "Set key = tab[" << i << "]" << std::endl;
+#endif
+		key = i;
+
+		for (int j = i + 1; j <= n; j++)
+			if (tab[j] > tab[key] && comp++)
+			{
+#ifdef DEBUG
+				std::cerr << "Set key = tab[" << j << "]" << std::endl;
+#endif
+				key = j;
+			}
+
+		// swap maximum element with the first unsorted one
+#ifdef DEBUG
+			std::cerr << "Swap tab[" << i - 1 << "] with tab[" \
+				<< key << "]" << std::endl;
+#endif
+			sort::swap_(tab, i, key); swap++;
+	}
+}
+
+void sort::heapify(double* tab, int heap_size, int i)
+{
+	// largest is index of current root element 
+#ifdef DEBUG
+	std::cerr << "Set key = tab[" << i << "]" << std::endl;
+#endif
+	int largest = i;
+	int l = 2 * i +	1;
+	int r = 2 * i + 2;
+
+	// if left child is larger then root element
+	if (l < heap_size && tab[l] > tab[largest] && comp++)
+	{
+#ifdef DEBUG
+		std::cerr << "Set key = tab[" << l << "]" << std::endl;
+#endif
+		largest = l;
+	}
+
+	// if right child is larger then root element
+	if (r < heap_size && tab[r] > tab[largest] && comp++)
+	{
+#ifdef DEBUG
+		std::cerr << "Set key = tab[" << r << "]" << std::endl;
+#endif
+		largest = r;
+	}
+
+	// if largest is not a root element
+	if (largest != i)
+	{
+#ifdef DEBUG
+		std::cerr << "Swap tab[" << i << "] with tab[" \
+			<< largest << "]" << std::endl;
+#endif
+		sort::swap_(tab, i, largest); swap++;
+
+		// correct heap (sub-tree)
+		sort::heapify(tab, heap_size, largest);
+	}
+}
+
+void sort::heapSort(double* tab, int l, int r)
+{
+	int n = r + 1 - l;
+
+	// build heap
+	for (int i = n / 2 - 1; i >= l; i--)
+		sort::heapify(tab, n, i);
+
+	// take each element from heap
+	for (int i = n - 1; i >= l; i--)
+	{
+		// move current root element to the end
+#ifdef DEBUG
+		std::cerr << "Swap tab[" << i << "] with tab[" \
+			<< 0 << "]" << std::endl;
+#endif
+		sort::swap_(tab, 0, i); swap++;
+
+		// heapify tab with reduced tab size
+		sort::heapify(tab, i, 0);
+	}
+}
+
+void sort::heapifyReverse(double* tab, int heap_size, int i)
+{
+	// smallest is index of current root element 
+#ifdef DEBUG
+	std::cerr << "Set key = tab[" << i << "]" << std::endl;
+#endif
+	int smallest = i;
+	int l = 2 * i + 1;
+	int r = 2 * i + 2;
+
+	// if left child is smaller then root element
+	if (l < heap_size && tab[l] < tab[smallest] && comp++)
+	{
+#ifdef DEBUG
+		std::cerr << "Set key = tab[" << l << "]" << std::endl;
+#endif
+		smallest = l;
+	}
+
+	// if right child is smaller then root element
+	if (r < heap_size && tab[r] < tab[smallest] && comp++)
+	{
+#ifdef DEBUG
+		std::cerr << "Set key = tab[" << r << "]" << std::endl;
+#endif
+		smallest = r;
+	}
+
+	// if smallest is not a root element
+	if (smallest != i)
+	{
+#ifdef DEBUG
+		std::cerr << "Swap tab[" << i << "] with tab[" \
+			<< smallest << "]" << std::endl;
+#endif
+		sort::swap_(tab, i, smallest); swap++;
+
+		// correct heap (sub-tree)
+		sort::heapifyReverse(tab, heap_size, smallest);
+	}
+}
+
+void sort::heapSortReverse(double* tab, int l, int r)
+{
+	int n = r + 1 - l;
+
+	// build heap
+	for (int i = n / 2 - 1; i >= l; i--)
+		sort::heapifyReverse(tab, n, i);
+
+	// take each element from heap
+	for (int i = n - 1; i >= l; i--)
+	{
+		// move current root element to the end
+#ifdef DEBUG
+		std::cerr << "Swap tab[" << i << "] with tab[" \
+			<< 0 << "]" << std::endl;
+#endif
+		sort::swap_(tab, 0, i); swap++;
+
+		// heapify tab with reduced tab size
+		sort::heapifyReverse(tab, i, 0);
+	}
+}
+
+int sort::chooseRandomDividePoint(int l, int r)
 {
 	//element losowy z przedzialu
 	//return (int)floor(rand() % (r - l + 1)) + l;
-	return getRand(l, r);
+	return sort::getRand(l, r);
 }
 
 int sort::randomizedSelectDivide(double* tab, int l, int r)
@@ -803,7 +1104,7 @@ double* sort::createTab(int m, int n)
 	{
 		for (int i = 0; i < n; ++i)
 		{
-			tab[i] = getRand(0,10000);
+			tab[i] = sort::getRand(0, 10000);
 		}
 	}
 	//ciagi posortowane
@@ -1095,6 +1396,51 @@ int sort::testSortWithoutStats(int algo, int order)
 			end = std::chrono::high_resolution_clock::now();
 		}
 	}
+	else if (algo == 4)
+	{
+		if (order == 1)
+		{
+			start = std::chrono::high_resolution_clock::now();
+			sort::selectionSort(tab, 0, n - 1);
+			end = std::chrono::high_resolution_clock::now();
+		}
+		else if (order == 2)
+		{
+			start = std::chrono::high_resolution_clock::now();
+			sort::selectionSortReverse(tab, 0, n - 1);
+			end = std::chrono::high_resolution_clock::now();
+		}
+	}
+	else if (algo == 5)
+	{
+		if (order == 1)
+		{
+			start = std::chrono::high_resolution_clock::now();
+			sort::heapSort(tab, 0, n - 1);
+			end = std::chrono::high_resolution_clock::now();
+		}
+		else if (order == 2)
+		{
+			start = std::chrono::high_resolution_clock::now();
+			sort::heapSortReverse(tab, 0, n - 1);
+			end = std::chrono::high_resolution_clock::now();
+		}
+	}
+	else if (algo == 6)
+	{
+		if (order == 1)
+		{
+			start = std::chrono::high_resolution_clock::now();
+			sort::quickSortWithInsertionSortAndMedian(tab, 0, n - 1);
+			end = std::chrono::high_resolution_clock::now();
+		}
+		else if (order == 2)
+		{
+			start = std::chrono::high_resolution_clock::now();
+			sort::heapSortReverse(tab, 0, n - 1);
+			end = std::chrono::high_resolution_clock::now();
+		}
+	}
 	if (sort::checkSortingAlgorithm(tab, 0, n-1, order) == 1)
 	{
 		std::cerr << "Errors occured, check input and output tab" << std::endl;
@@ -1132,7 +1478,12 @@ int sort::testSortWithStats(char* filename, int k)
 	{
 		for (int j = 0; j < k; j++)
 		{
-			double* tab1 = createTab(1, i);
+			double* tab1 = new double[i];
+			for (int x = 0; x < i; ++x)
+			{
+				tab1[x] = sort::getRand(0, 10000);
+			}
+			//double* tab1 = sort::createTab(1, i);
 			//printTab(tab1, i);
 			double* tab2 = new double[i];
 			//std::copy(tab1, tab1 + i, tab2);
@@ -1143,10 +1494,19 @@ int sort::testSortWithStats(char* filename, int k)
 			double* tab4 = new double[i];
 			//std::copy(tab1, tab1 + i, tab4);
 			memcpy(tab4, tab1, i * sizeof(double));
+			double* tab5 = new double[i];
+			//std::copy(tab1, tab1 + i, tab3);
+			memcpy(tab5, tab1, i * sizeof(double));
+			double* tab6 = new double[i];
+			//std::copy(tab1, tab1 + i, tab4);
+			memcpy(tab6, tab1, i * sizeof(double));
+			double* tab7 = new double[i];
+			//std::copy(tab1, tab1 + i, tab4);
+			memcpy(tab7, tab1, i * sizeof(double));
 
 			comp = 0; swap = 0;
 			auto start = std::chrono::high_resolution_clock::now();
-			insertionSort(tab1, 0, i - 1);
+			sort::insertionSort(tab1, 0, i - 1);
 			auto end = std::chrono::high_resolution_clock::now();
 			//printTab(tab1, i);
 			sort::writeToFile(1, i, comp, swap, (int)std::chrono::duration_cast<std::chrono::microseconds>(end - start).count(), filename);
@@ -1175,6 +1535,30 @@ int sort::testSortWithStats(char* filename, int k)
 			//printTab(tab4, i);
 			sort::writeToFile(4, i, comp, swap, (int)std::chrono::duration_cast<std::chrono::microseconds>(end - start).count(), filename);
 			delete[] tab4;
+
+			comp = 0; swap = 0;
+			start = std::chrono::high_resolution_clock::now();
+			selectionSort(tab5, 0, i - 1);
+			end = std::chrono::high_resolution_clock::now();
+			//printTab(tab3, i);
+			sort::writeToFile(11, i, comp, swap, (int)std::chrono::duration_cast<std::chrono::microseconds>(end - start).count(), filename);
+			delete[] tab5;
+
+			comp = 0; swap = 0;
+			start = std::chrono::high_resolution_clock::now();
+			heapSort(tab6, 0, i - 1);
+			end = std::chrono::high_resolution_clock::now();
+			//printTab(tab4, i);
+			sort::writeToFile(12, i, comp, swap, (int)std::chrono::duration_cast<std::chrono::microseconds>(end - start).count(), filename);
+			delete[] tab6;
+
+			comp = 0; swap = 0;
+			start = std::chrono::high_resolution_clock::now();
+			quickSortWithInsertionSortAndMedian(tab7, 0, i - 1);
+			end = std::chrono::high_resolution_clock::now();
+			//printTab(tab4, i);
+			sort::writeToFile(13, i, comp, swap, (int)std::chrono::duration_cast<std::chrono::microseconds>(end - start).count(), filename);
+			delete[] tab7;
 		}
 	}
 	return 0;
@@ -1210,6 +1594,9 @@ int sort::testMergedSort(int m)
 				memcpy(tab5, tab1, i * sizeof(double));
 
 				comp = 0; swap = 0;
+				comp++;
+				++comp;
+
 				insertionSort(tab1, 0, i - 1);
 				//printTab(tab1, i);
 				sort::writeToFile(1, i, comp, swap, empty);
