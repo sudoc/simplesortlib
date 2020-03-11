@@ -52,13 +52,17 @@ int main(int argc, char* argv[])
 			}
 			i++;
 		}
-		else if (strcmp(argv[i], "--asc") == 0)
+		else if (strcmp(argv[i], "--comp") == 0)
 		{
-			order = 1;
-		}
-		else if (strcmp(argv[i], "--desc") == 0)
-		{
-			order = 2;
+			if (strcmp(argv[i + 1], ">=") == 0)
+			{
+				order = 1;
+			}
+			else if (strcmp(argv[i + 1], "<=") == 0)
+			{
+				order = 2;
+			}
+			i++;
 		}
 		else if (strcmp(argv[i], "--stat") == 0)
 		{
